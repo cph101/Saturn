@@ -4,13 +4,14 @@
   "description": "Bot for Solarplanet",
   "main": "dist/compiled.js",
   "scripts": {
-    "main": "tsc || node run dist/compiled.js >> output.txt"
+    "compile": "tsc",
+    "main": "node dist/index.js"
   },
   "author": "cph101",
   "license": "ARR",
-  "type": "module",
   "dependencies": {
-    "discord.js": "^14.16.3"
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/node": "^22.9.3",

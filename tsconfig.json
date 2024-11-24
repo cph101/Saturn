@@ -1,7 +1,10 @@
 {
-    "compilerOptions": {
-      "module": "ESNext",
-      "outDir": "./dist",
-      "moduleResolution": "node"
-    }
+  "compilerOptions": {
+    "lib": [ "ES2023" ],
+    "module": "CommonJS",
+    "target": "ES2023",
+    "outDir": "./dist/",
+    "moduleResolution": "node",
+    "sourceMap": false
   }
+}

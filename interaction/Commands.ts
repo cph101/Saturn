@@ -1,6 +1,6 @@
-import { Routes, ChatInputCommandInteraction } from "discord.js";
+import { Routes, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { NeptuneBot } from "..";
-import { PingCommand } from "./debug/PingCommand";
+import { UserClanCommand } from "./guilds/UserClanCommandCommand";
 
 export interface NeptuneCommand {
     getDescription(): string;
@@ -8,15 +8,27 @@ export interface NeptuneCommand {
 }
 
 export class NeptuneCommands {
-    static commands: { [key: string]: NeptuneCommand } = {
-        "ping": new PingCommand()
+    public static commands: { [key: string]: NeptuneCommand } = {
+        "user clan": new UserClanCommand()
     }
 
     static async registerAll() {
-        await NeptuneBot.INSTANCE.API.put(Routes.applicationCommands(NeptuneBot.INSTANCE.CLIENT_ID), { body:
-            Object.fromEntries(
-                Object.entries(this.commands).map(([name, command]) => [name, command.getDescription()])
-            )
+        await NeptuneBot.INSTANCE.api.put(Routes.applicationCommands(NeptuneBot.CLIENT_ID), { body:
+            Object.entries(this.commands).map(entry => {
+                return {
+                    name: entry[0],
+                    description: entry[1].getDescription()
+                }
+            })
         });
+
+        NeptuneBot.INSTANCE.client.on('interactionCreate', async interaction => {
+            if (!interaction.isChatInputCommand) return;
+            const cInteraction = (interaction as ChatInputCommandInteraction)
+            const command = NeptuneCommands.commands[cInteraction.commandName]
+
+            if (command) command.handle(cInteraction);
+            else cInteraction.reply({ content: `Command not found: ${cInteraction.commandName}` })
+        })
     }
 }
