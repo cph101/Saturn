@@ -1,0 +1,21 @@
+{
+  "name": "neptune",
+  "version": "1.0.0",
+  "description": "Bot for Solarplanet",
+  "main": "dist/compiled.js",
+  "scripts": {
+    "main": "tsc || node run dist/compiled.js >> output.txt"
+  },
+  "author": "cph101",
+  "license": "ARR",
+  "type": "module",
+  "dependencies": {
+    "discord.js": "^14.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2"
+  }
+}
