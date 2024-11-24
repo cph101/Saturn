@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction } from "discord.js"
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js"
 import { NeptuneCommand } from "../Commands"
 
 export class PingCommand implements NeptuneCommand {
-    getDescription() {
-        return "Test Connection"
+    makeCommand(): SlashCommandBuilder {
+        return new SlashCommandBuilder().setName("Ping").setDescription("Test Connection")
     }
 
     async handle(interaction: ChatInputCommandInteraction) {
