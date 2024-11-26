@@ -1,9 +1,10 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
-import { NeptuneSubCommand } from "../Commands";
-const fs = require('node:fs/promises');
-const path = require('node:path');
+import { SaturnSubCommand } from "../Commands";
 
-export class ClanCommandList implements NeptuneSubCommand {
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+
+export class ClanCommandList implements SaturnSubCommand {
     makeSubCommand(): SlashCommandSubcommandBuilder {
         return new SlashCommandSubcommandBuilder()
             .setName("list").setDescription("Lists Solarplanet Guilds")

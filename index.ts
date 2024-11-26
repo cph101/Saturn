@@ -1,9 +1,9 @@
 import { Client, REST } from 'discord.js';
-import { NeptuneCommands } from './interaction/Commands';
+import { SaturnCommands } from './interaction/Commands';
 import 'dotenv/config'
 
-export class NeptuneBot {
-  public static INSTANCE = new NeptuneBot();
+export class SaturnBot {
+  public static INSTANCE = new SaturnBot();
   public static CLIENT_ID: string = process.env.CLIENT_ID || "";
 
   public api: REST = new REST({ version: '10' });
@@ -19,13 +19,13 @@ export class NeptuneBot {
   
   public static spawnIn() {
     console.log("Registering commands")
-    NeptuneCommands.registerAll();
+    SaturnCommands.registerAll();
 
-    NeptuneBot.INSTANCE.client.on('ready', client => {
+    SaturnBot.INSTANCE.client.on('ready', client => {
       console.log("Bot successfully loaded")
     });
     
   }
 }
 
-NeptuneBot.spawnIn();
+SaturnBot.spawnIn();

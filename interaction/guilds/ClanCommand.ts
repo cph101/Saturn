@@ -1,9 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
-import { NeptuneCommand } from "../Commands";
-import { ClanCommandUser } from "./ClanCommandUser";
-import { ClanCommandList } from "./ClanCommandList";
+import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
+import { SaturnCommand } from "../Commands"
+import { ClanCommandList } from "./ClanCommandList"
+import { ClanCommandUser } from "./ClanCommandUser"
 
-export class ClanCommand implements NeptuneCommand {
+
+export class ClanCommand implements SaturnCommand {
     makeCommand(): SlashCommandSubcommandsOnlyBuilder {
         return new SlashCommandBuilder().setName("guild")
             .setDescription("Get information relating to Guilds")

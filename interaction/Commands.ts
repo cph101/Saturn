@@ -1,35 +1,32 @@
-import { 
-    Routes, ChatInputCommandInteraction, 
-    SlashCommandSubcommandsOnlyBuilder, SlashCommandSubcommandBuilder 
-} from "discord.js";
-import { NeptuneBot } from "..";
+import { ChatInputCommandInteraction, Routes, SlashCommandSubcommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import { ClanCommand } from "./guilds/ClanCommand";
+import { SaturnBot } from "..";
 
-export interface NeptuneCommand {
+export interface SaturnCommand {
     makeCommand(): SlashCommandSubcommandsOnlyBuilder;
     handle(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
-export interface NeptuneSubCommand {
+export interface SaturnSubCommand {
     makeSubCommand(): SlashCommandSubcommandBuilder;
     handle(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
-export class NeptuneCommands {
-    public static commands: [NeptuneCommand] = [
+export class SaturnCommands {
+    public static commands: [SaturnCommand] = [
         new ClanCommand()
     ]
 
-    static getCommand(name: string): NeptuneCommand {
+    static getCommand(name: string): SaturnCommand {
         return this.commands.filter(c => c.makeCommand().name == name)[0];
     }
 
     static async registerAll() {
-        await NeptuneBot.INSTANCE.api.put(Routes.applicationCommands(NeptuneBot.CLIENT_ID), { body:
+        await SaturnBot.INSTANCE.api.put(Routes.applicationCommands(SaturnBot.CLIENT_ID), { body:
             this.commands.map(c => c.makeCommand().toJSON())
         });
 
-        NeptuneBot.INSTANCE.client.on('interactionCreate', async interaction => {
+        SaturnBot.INSTANCE.client.on('interactionCreate', async interaction => {
             if (!interaction.isChatInputCommand) return;
             const cInteraction = (interaction as ChatInputCommandInteraction)
             const command = this.getCommand(cInteraction.commandName)

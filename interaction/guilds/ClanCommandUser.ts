@@ -1,8 +1,8 @@
-import { ChatInputCommandInteraction, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, SnowflakeUtil, User, UserManager } from "discord.js";
-import { NeptuneSubCommand } from "../Commands";
-import { NeptuneBot } from "../..";
+import { ChatInputCommandInteraction, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, User, UserManager } from "discord.js";
+import { SaturnSubCommand } from "../Commands";
+import { SaturnBot } from "../..";
 
-export class ClanCommandUser implements NeptuneSubCommand {
+export class ClanCommandUser implements SaturnSubCommand {
     makeSubCommand(): SlashCommandSubcommandBuilder {
         return new SlashCommandSubcommandBuilder()
             .setName("user").setDescription("Gets guild information about the specified user, or the command sender")
@@ -14,7 +14,7 @@ export class ClanCommandUser implements NeptuneSubCommand {
         let name: User = interaction.options.getUser("name") ?? interaction.user;
         let id: string = interaction.options.getString("id")
 
-        let manager: UserManager = NeptuneBot.INSTANCE.client.users;
+        let manager: UserManager = SaturnBot.INSTANCE.client.users;
 
         console.log(manager.resolve(id ?? name).toJSON())
     }
