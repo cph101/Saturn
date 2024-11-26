@@ -1,8 +1,11 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
 import { SaturnSubCommand } from "../Commands";
+import axios from "axios";
 
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import { SaturnBot } from "../..";
+
 
 export class ClanCommandList implements SaturnSubCommand {
     makeSubCommand(): SlashCommandSubcommandBuilder {
@@ -20,7 +23,7 @@ export class ClanCommandList implements SaturnSubCommand {
         var clanList = "";
         
         for (var i = 0; i < CLANS.length; i++) {
-            clanList += `\`${i}\` <:${CLANS[i].name.toLowerCase()}guild:${CLANS[i].icon}> **\`#${CLANS[i].name.toUpperCase()}\`** (\`${CLANS[i].id || 0}\`)\n`
+            clanList += `\`${i + 1}\` <:guild${i + 1}icon:${CLANS[i].icon}> **\`#${CLANS[i].name.toUpperCase()}\`** (\`${await this.getClanMemberCount(CLANS[i].id) || 0} / 200\`)\n`
         }
 
         const embed = new EmbedBuilder()
@@ -29,5 +32,20 @@ export class ClanCommandList implements SaturnSubCommand {
             .setDescription(clanList)
 
         interaction.reply({ embeds: [embed] })
+    }
+
+    async getClanMemberCount(guildId: string) {
+
+        if (guildId == null) return null;
+
+        const response = await axios.get(
+            `https://discord.com/api/v9/discovery/${guildId}/clan`, {
+                headers: {
+                    Authorization: SaturnBot.UB_TOKEN,
+                }
+            }
+        );
+
+        return response.data["member_count"];
     }
 }
