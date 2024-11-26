@@ -1,15 +1,23 @@
-import { Routes, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { 
+    Routes, ChatInputCommandInteraction, 
+    SlashCommandSubcommandsOnlyBuilder, SlashCommandSubcommandBuilder 
+} from "discord.js";
 import { NeptuneBot } from "..";
-import { UserClanCommand } from "./guilds/UserClanCommandCommand";
+import { ClanCommand } from "./guilds/ClanCommand";
 
 export interface NeptuneCommand {
-    makeCommand(): SlashCommandBuilder;
+    makeCommand(): SlashCommandSubcommandsOnlyBuilder;
+    handle(interaction: ChatInputCommandInteraction): Promise<void>;
+}
+
+export interface NeptuneSubCommand {
+    makeSubCommand(): SlashCommandSubcommandBuilder;
     handle(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
 export class NeptuneCommands {
     public static commands: [NeptuneCommand] = [
-        new UserClanCommand()
+        new ClanCommand()
     ]
 
     static getCommand(name: string): NeptuneCommand {

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Client, GatewayIntentBits, REST } from 'discord.js';
+import { Client, REST } from 'discord.js';
 import { NeptuneCommands } from './interaction/Commands';
 import 'dotenv/config'
 
@@ -21,7 +21,7 @@ export class NeptuneBot {
     console.log("Registering commands")
     NeptuneCommands.registerAll();
 
-    NeptuneBot.INSTANCE.client.on('ready', () => {
+    NeptuneBot.INSTANCE.client.on('ready', client => {
       console.log("Bot successfully loaded")
     });
     
