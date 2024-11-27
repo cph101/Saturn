@@ -27,7 +27,7 @@ export class ClanCommandList implements SaturnSubCommand {
         }
 
         const embed = new EmbedBuilder()
-            .setColor(0x1e1f22)
+            .setColor(0x3567a3)
             .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206><:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
 
