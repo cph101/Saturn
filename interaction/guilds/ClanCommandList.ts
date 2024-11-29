@@ -1,10 +1,8 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
-import { SaturnSubCommand } from "../Commands";
-import axios from "axios";
+import { ActionRowBuilder, ButtonBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
+import { SaturnCommands, SaturnSubCommand } from "../Commands";
 
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import { SaturnBot } from "../..";
+import { ClanApplyButton } from "./ClanApplyButton";
+import { Clan, Clans } from "./Clans";
 
 
 export class ClanCommandList implements SaturnSubCommand {
@@ -15,37 +13,35 @@ export class ClanCommandList implements SaturnSubCommand {
 
     async handle(interaction: ChatInputCommandInteraction) {
 
-        let CLANS = JSON.parse(await fs.readFile(
-            path.resolve('resources/SolarPlanetGuilds.json'), 
-            { encoding: 'utf8' }
-        )).values;
+        var clanList: string = "";
 
-        var clanList = "";
-        
-        for (var i = 0; i < CLANS.length; i++) {
-            clanList += `\`${i + 1}\` <:guild${i + 1}icon:${CLANS[i].icon}> **\`#${CLANS[i].name.toUpperCase()}\`** (\`${await this.getClanMemberCount(CLANS[i].id) || 0} / 200\`)\n`
+        // Return new response if last checked 1 1/2 hours ago or more
+        if (Clans.lastUpdated <= (Date.now() - (1000 * 60 * 90))) {
+            await Clans.refreshCache(interaction); 
         }
+        
+        Clans.getClanMemberCounts().forEach(async ({ clan, members }, index) => {
+            if (interaction.replied) return;
 
-        const embed = new EmbedBuilder()
+            clanList += `\`${index + 1}\` <:guild${index + 1}icon:${clan.icon}> **\`#${
+                clan.name.toUpperCase()
+            }\`** (\`${members} / 200\`)\n`;
+        });
+
+
+        const embed: EmbedBuilder = new EmbedBuilder()
             .setColor(0x3567a3)
-            .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206><:solarplanet1:1311065266201038899>")
+            .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206>"
+                + "<:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
 
-        interaction.reply({ embeds: [embed] })
-    }
+        const apply: ButtonBuilder = SaturnCommands
+            .getBtn("clanCandidateApplyButton").makeButton();
 
-    async getClanMemberCount(guildId: string) {
+        const actions: ActionRowBuilder<ButtonBuilder> = 
+            new ActionRowBuilder<ButtonBuilder>()
+			    .addComponents(apply);
 
-        if (guildId == null) return null;
-
-        const response = await axios.get(
-            `https://discord.com/api/v9/discovery/${guildId}/clan`, {
-                headers: {
-                    Authorization: SaturnBot.UB_TOKEN,
-                }
-            }
-        );
-
-        return response.data["member_count"];
+        interaction.reply({ embeds: [embed], components: [actions] })
     }
 }

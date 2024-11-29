@@ -1,10 +1,17 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, InteractionReplyOptions, Message, BooleanCache, MessagePayload, InteractionResponse, CacheType } from "discord.js";
 import { AxiosError } from "axios";
+
+export interface InteractionReplyable<Cached extends CacheType = CacheType> {
+    reply(options: InteractionReplyOptions & { fetchReply: true }): Promise<Message<BooleanCache<Cached>>>;
+    reply(
+        options: string | MessagePayload | InteractionReplyOptions,
+    ): Promise<InteractionResponse<BooleanCache<Cached>>>
+}
 
 export class ApiUtil {
 
     static async wrapAxiosWithEmbedError<T>(
-        interaction: ChatInputCommandInteraction,
+        interaction: InteractionReplyable,
         func: () => T,
         errorhandler: (embed: EmbedBuilder, error: AxiosError) => void = function () {}
     ) {

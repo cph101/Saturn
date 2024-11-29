@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, SnowflakeUtil, User, UserManager } from "discord.js";
+import { ApplicationEmoji, ChatInputCommandInteraction, EmbedBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, SnowflakeUtil, User, UserManager } from "discord.js";
 import { SaturnSubCommand } from "../Commands";
 import { ApiUtil } from "../ApiUtil";
 
@@ -16,13 +16,14 @@ export class ClanCommandUser implements SaturnSubCommand {
     }
 
     async handle(interaction: ChatInputCommandInteraction) {
-        const id: string = interaction.options.getString("id") ?? (interaction.options.getUser("name") ?? interaction.user).id;
+        const id: string = interaction.options.getString("id") 
+        ?? (interaction.options.getUser("name") ?? interaction.user).id;
 
         const user: User = await this.getUser(id, interaction)
 
         if (!interaction.replied) {
             if (user["clan"]) {
-                const emoji = await this.createEmoji(
+                const emoji: ApplicationEmoji = await this.createEmoji(
                     user["clan"]["identity_guild_id"], user["clan"]["badge"]
                 );
 
@@ -31,13 +32,12 @@ export class ClanCommandUser implements SaturnSubCommand {
                     { encoding: 'utf8' }
                 )).values.map(clan => clan["id"]);
 
-                const isSPOwned = CLANS.includes(user["clan"]["identity_guild_id"]);
+                const isSPOwned: boolean = CLANS.includes(user["clan"]["identity_guild_id"]);
 
-                const reply = new EmbedBuilder()
+                const reply: EmbedBuilder = new EmbedBuilder()
                     .setColor(0x3567a3)
 
                 reply.setTitle(user.username + "'s clan")
-
                 reply.setDescription(`<:${emoji.name}:${emoji.id}> **${user["clan"]["tag"]}** - ${isSPOwned ? "Owned" : "Not owned"} by Solarplanet`)
 
                 await interaction.reply({ embeds: [reply] })
@@ -54,9 +54,9 @@ export class ClanCommandUser implements SaturnSubCommand {
         }
     }
 
-    async createEmoji(guildID: string, hash: string) {
+    async createEmoji(guildID: string, hash: string): Promise<ApplicationEmoji> {
 
-        const emojiImage = await fetch(`https://cdn.discordapp.com/clan-badges/${guildID}/${hash}.png`)
+        const emojiImage: ArrayBuffer = await fetch(`https://cdn.discordapp.com/clan-badges/${guildID}/${hash}.png`)
             .then(res => res.arrayBuffer());
 
         return await SaturnBot.INSTANCE.client.application.emojis.create({
@@ -65,7 +65,7 @@ export class ClanCommandUser implements SaturnSubCommand {
         })
     }
 
-    async getUser(userID: string, interaction: ChatInputCommandInteraction) {
+    async getUser(userID: string, interaction: ChatInputCommandInteraction): Promise<User> {
 
         if (userID == null) return null;
 
