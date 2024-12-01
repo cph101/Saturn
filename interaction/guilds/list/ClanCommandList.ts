@@ -27,13 +27,13 @@ export class ClanCommandList implements SaturnSubCommand {
             }\`** (\`${members} / 200\`)\n`;
         });
 
+        clanList += "\n <:info:1312840063276548207> **Note: Only level 30 members or server boosters may join guilds.**"
 
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor(0x3567a3)
             .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206>"
                 + "<:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
-            .setFooter({ iconURL: })
 
         const apply: ButtonBuilder = SaturnCommands
             .getBtn("clanCandidateApplyButton").makeButton();

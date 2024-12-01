@@ -4,6 +4,12 @@ import { ClanApplyStorage, Clans } from "../Clans";
 
 export class ClanApplyButton implements SaturnButton {
 
+    private static whitelistedRoles = [
+        "1306645845642444810", // top floor
+        "1304539496301465681", // loved
+        "1248920049457303655" // rich
+    ]
+
     makeButton(): ButtonBuilder {
         return new ButtonBuilder()
             .setCustomId("clanCandidateApplyButton")
@@ -39,6 +45,12 @@ export class ClanApplyButton implements SaturnButton {
             new ActionRowBuilder<StringSelectMenuBuilder>()
             .addComponents(clan);
 
+
+        // TODO: find out why this is happening, might be perms
+        // Add a perms parameter to EventSubscriber (see big A refactor)
+        const user = await interaction.guild.members.fetch(interaction.user)
+        console.log(user.roles.cache.hasAny(...ClanApplyButton.whitelistedRoles))
+        
         interaction.reply({
             content: 'Which guild would you like to apply to?',
             components: [actions],
