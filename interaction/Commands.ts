@@ -47,15 +47,15 @@ export class SaturnCommands {
             const bInteraction = interaction.isButton ? (interaction as ButtonInteraction) : null;
             const SSMInteraction = interaction.isStringSelectMenu ? (interaction as StringSelectMenuInteraction) : null;
 
-            if (SSMInteraction && SSMInteraction.customId.split("::")[0] == "applyToClan") {
+            if (SSMInteraction && SSMInteraction.customId?.split("::")[0] == "applyToClan") {
                 ClanApply.applyToClan(SSMInteraction);
                 return;
             }
             
-            const button = this.getBtn(bInteraction.customId.split("::")[0])
+            const button = this.getBtn(bInteraction.customId?.split("::")[0])
             if (button) { button.handle(bInteraction); return; }
             
-            const command = this.getCommand(cInteraction.commandName.split("::")[0])
+            const command = this.getCommand(cInteraction.commandName?.split("::")[0])
             if (command) { command.handle(cInteraction); return; }
 
             if (bInteraction && !button) cInteraction.reply({ content: `Invalid Button: ${bInteraction.customId}` })

@@ -1,5 +1,6 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuInteraction, TextBasedChannel } from "discord.js";
 import { ClanApplyStorage, Clans } from "../Clans";
+import { SaturnBot } from "../../..";
 
 export class ClanApply {
 
@@ -11,12 +12,19 @@ export class ClanApply {
             new ButtonBuilder().setURL(invite).setStyle(ButtonStyle.Link).setLabel("Join server")
         )
 
-        const iMeta = ClanApplyStorage.query(interaction.customId.split("::")[1])
+        const oldInteraction = ClanApplyStorage.query(interaction.customId?.split("::")[1]);
 
-        await interaction.editReply({
-            content: `You selected ${selectedClan.clan.name}! Click below to join:`,
-            components: [actionRow]
-        });
+        let humanReadableName = selectedClan.clan.name;
+
+        if (selectedClan.clan.id == "966137238880682145") {
+            // long ass symbols guild
+            humanReadableName = `Long, aka ${humanReadableName.slice(0, 1)}...`;
+        }
+
+        const content = `**${humanReadableName}** selected. Click below to join:`
+
+        oldInteraction.editReply({ content, components: [actionRow] })
+        interaction.deferUpdate()
     }
 
 }

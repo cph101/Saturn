@@ -18,7 +18,8 @@ export class ClanApplyButton implements SaturnButton {
             await Clans.refreshCache(interaction); 
         }
 
-        const uuid = ClanApplyStorage.getUUID()
+        const uuid = ClanApplyStorage.getUUID();
+        ClanApplyStorage.cache(interaction, uuid)
 
         const clan = new StringSelectMenuBuilder()
             .setCustomId('applyToClan::' + uuid)
@@ -38,13 +39,12 @@ export class ClanApplyButton implements SaturnButton {
             new ActionRowBuilder<StringSelectMenuBuilder>()
             .addComponents(clan);
 
-        await interaction.reply({
+        interaction.reply({
             content: 'Which guild would you like to apply to?',
             components: [actions],
             ephemeral: true
         });
 
-        ClanApplyStorage.cache(interaction.id, interaction.guildId, uuid)
     }
 
 }

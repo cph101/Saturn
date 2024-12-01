@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
 import { SaturnCommands, SaturnSubCommand } from "../../Commands";
 
-import { Clans } from "../Clans";
+import { ClanApplyStorage, Clans } from "../Clans";
 
 
 export class ClanCommandList implements SaturnSubCommand {
@@ -41,6 +41,7 @@ export class ClanCommandList implements SaturnSubCommand {
             new ActionRowBuilder<ButtonBuilder>()
 			    .addComponents(apply);
 
-        interaction.reply({ embeds: [embed], components: [actions] })
+        const msg = await interaction.reply({ embeds: [embed], components: [actions] })
+
     }
 }
