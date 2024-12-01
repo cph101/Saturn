@@ -1,6 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuInteraction, TextBasedChannel } from "discord.js";
 import { ClanApplyStorage, Clans } from "../Clans";
-import { SaturnBot } from "../../..";
 
 export class ClanApply {
 

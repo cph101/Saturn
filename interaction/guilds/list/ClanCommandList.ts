@@ -33,6 +33,7 @@ export class ClanCommandList implements SaturnSubCommand {
             .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206>"
                 + "<:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
+            .setFooter({ iconURL: })
 
         const apply: ButtonBuilder = SaturnCommands
             .getBtn("clanCandidateApplyButton").makeButton();
