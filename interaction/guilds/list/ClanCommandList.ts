@@ -1,8 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
-import { SaturnCommands, SaturnSubCommand } from "../Commands";
+import { SaturnCommands, SaturnSubCommand } from "../../Commands";
 
-import { ClanApplyButton } from "./ClanApplyButton";
-import { Clan, Clans } from "./Clans";
+import { Clans } from "../Clans";
 
 
 export class ClanCommandList implements SaturnSubCommand {

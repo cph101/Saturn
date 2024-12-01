@@ -1,6 +1,7 @@
 import { Client, REST } from 'discord.js';
 import { SaturnCommands } from './interaction/Commands';
 import 'dotenv/config'
+import { randomUUID } from 'node:crypto';
 
 export class SaturnBot {
   public static INSTANCE: SaturnBot = new SaturnBot();

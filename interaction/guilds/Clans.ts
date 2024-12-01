@@ -4,6 +4,7 @@ import { SaturnBot } from "../..";
 import axios from "axios";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import { randomUUID } from "node:crypto";
 
 export type Clan = {
     id: string
@@ -65,5 +66,25 @@ export class Clans {
             }
 
         });
+    }
+}
+
+export class ClanApplyStorage {
+    private static map: { [key : string ]: [string, string] } = {}
+
+    public static cache(id: string, guildID: string, uuid: string) {
+        this.map[uuid] = [id, guildID];
+    }
+
+    public static remove(uuid: string) {
+        if (this.map[uuid] != null) delete this.map[uuid];
+    }
+
+    public static query(uuid: string): [string, string] {
+        return this.map[uuid];
+    }
+
+    public static getUUID(): string {
+        return randomUUID().replaceAll("-", "").slice(0, 12);
     }
 }

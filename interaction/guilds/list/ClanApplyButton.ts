@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import { SaturnButton } from "../Commands";
-import { Clans } from "./Clans";
+import { SaturnButton } from "../../Commands";
+import { ClanApplyStorage, Clans } from "../Clans";
 
 export class ClanApplyButton implements SaturnButton {
 
@@ -18,17 +18,19 @@ export class ClanApplyButton implements SaturnButton {
             await Clans.refreshCache(interaction); 
         }
 
+        const uuid = ClanApplyStorage.getUUID()
+
         const clan = new StringSelectMenuBuilder()
-            .setCustomId('clan')
+            .setCustomId('applyToClan::' + uuid)
             .setPlaceholder('Choose a guild')
             .addOptions(
                 Clans.getClanMemberCounts()
                     .filter(({ members }) => members < 200) // check not full
-                    .map(({ clan, members }) =>
+                    .map(({ clan, members }, index) =>
                         new StringSelectMenuOptionBuilder()
                             .setLabel(clan.name)
                             .setDescription(`${members} / 200 members`)
-                            .setValue(clan.name.toLowerCase())
+                            .setValue(index.toString())
                     )
             );
 
@@ -37,10 +39,12 @@ export class ClanApplyButton implements SaturnButton {
             .addComponents(clan);
 
         await interaction.reply({
-            content: 'Choose a guild',
+            content: 'Which guild would you like to apply to?',
             components: [actions],
             ephemeral: true
         });
+
+        ClanApplyStorage.cache(interaction.id, interaction.guildId, uuid)
     }
 
 }

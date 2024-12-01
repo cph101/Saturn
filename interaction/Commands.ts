@@ -1,7 +1,8 @@
-import { ButtonBuilder, ButtonInteraction, ChatInputCommandInteraction, Routes, SlashCommandSubcommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
+import { ButtonBuilder, ButtonInteraction, ChatInputCommandInteraction, Routes, SlashCommandSubcommandBuilder, SlashCommandSubcommandsOnlyBuilder, StringSelectMenuInteraction } from "discord.js";
 import { ClanCommand } from "./guilds/ClanCommand";
 import { SaturnBot } from "..";
-import { ClanApplyButton } from "./guilds/ClanApplyButton";
+import { ClanApplyButton } from "./guilds/list/ClanApplyButton";
+import { ClanApply } from "./guilds/list/ClanApply";
 
 export interface SaturnCommand {
     makeCommand(): SlashCommandSubcommandsOnlyBuilder;
@@ -44,11 +45,17 @@ export class SaturnCommands {
             if (!interaction.isChatInputCommand) return;
             const cInteraction = interaction.isChatInputCommand ? (interaction as ChatInputCommandInteraction) : null;
             const bInteraction = interaction.isButton ? (interaction as ButtonInteraction) : null;
+            const SSMInteraction = interaction.isStringSelectMenu ? (interaction as StringSelectMenuInteraction) : null;
+
+            if (SSMInteraction && SSMInteraction.customId.split("::")[0] == "applyToClan") {
+                ClanApply.applyToClan(SSMInteraction);
+                return;
+            }
             
-            const button = this.getBtn(bInteraction.customId)
+            const button = this.getBtn(bInteraction.customId.split("::")[0])
             if (button) { button.handle(bInteraction); return; }
             
-            const command = this.getCommand(cInteraction.commandName)
+            const command = this.getCommand(cInteraction.commandName.split("::")[0])
             if (command) { command.handle(cInteraction); return; }
 
             if (bInteraction && !button) cInteraction.reply({ content: `Invalid Button: ${bInteraction.customId}` })

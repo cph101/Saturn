@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
 import { SaturnCommand } from "../Commands"
-import { ClanCommandList } from "./ClanCommandList"
+import { ClanCommandList } from "./list/ClanCommandList"
 import { ClanCommandUser } from "./ClanCommandUser"
 
 
