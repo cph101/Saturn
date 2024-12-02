@@ -1,7 +1,6 @@
 import { Client, REST } from 'discord.js';
-import { SaturnCommands } from './interaction/Commands';
+import { SaturnInteractions } from './api/Interactions';
 import 'dotenv/config'
-import { randomUUID } from 'node:crypto';
 
 export class SaturnBot {
   public static INSTANCE: SaturnBot = new SaturnBot();
@@ -21,8 +20,9 @@ export class SaturnBot {
   }
   
   public static spawnIn() {
-    console.log("Registering commands")
-    SaturnCommands.registerAll();
+    SaturnInteractions.loadHandlers().then(() => {
+      SaturnInteractions.startListening()
+    });
 
     SaturnBot.INSTANCE.client.on('ready', client => {
       console.log("Bot successfully loaded")

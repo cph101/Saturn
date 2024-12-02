@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js"
-import { SaturnCommand } from "../Commands"
 
-export class PingCommand implements SaturnCommand {
+export class PingCommand {
     makeCommand(): SlashCommandBuilder {
         return new SlashCommandBuilder().setName("Ping").setDescription("Test Connection")
     }

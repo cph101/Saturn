@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption } from "discord.js";
-import { SaturnSubCommand } from "../../Commands";
 
-export class ClanCommandAccept implements SaturnSubCommand {
+export class ClanCommandAccept {
 
     // Waah spaghetti code. Have a beer and forget you saw this
     makeSubCommand(): SlashCommandSubcommandBuilder {

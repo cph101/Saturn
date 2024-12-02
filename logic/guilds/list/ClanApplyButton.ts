@@ -1,8 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import { SaturnButton } from "../../Commands";
 import { ClanApplyStorage, Clans } from "../Clans";
 
-export class ClanApplyButton implements SaturnButton {
+export class ClanApplyButton {
 
     private static whitelistedRoles = [
         "1306645845642444810", // top floor

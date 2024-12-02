@@ -1,10 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashCommandSubcommandBuilder } from "discord.js";
-import { SaturnCommands, SaturnSubCommand } from "../../Commands";
 
 import { ClanApplyStorage, Clans } from "../Clans";
 
 
-export class ClanCommandList implements SaturnSubCommand {
+export class ClanCommandList {
     makeSubCommand(): SlashCommandSubcommandBuilder {
         return new SlashCommandSubcommandBuilder()
             .setName("list").setDescription("Lists Solarplanet Guilds")
@@ -35,8 +34,8 @@ export class ClanCommandList implements SaturnSubCommand {
                 + "<:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
 
-        const apply: ButtonBuilder = SaturnCommands
-            .getBtn("clanCandidateApplyButton").makeButton();
+        const apply: ButtonBuilder | null = null// = SaturnCommands
+            //.getBtn("clanCandidateApplyButton").makeButton();
 
         const actions: ActionRowBuilder<ButtonBuilder> = 
             new ActionRowBuilder<ButtonBuilder>()

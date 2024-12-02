@@ -1,5 +1,4 @@
 import { ApplicationEmoji, ChatInputCommandInteraction, EmbedBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, SnowflakeUtil, User, UserManager } from "discord.js";
-import { SaturnSubCommand } from "../Commands";
 import { ApiUtil } from "../ApiUtil";
 
 import axios from "axios";
@@ -7,7 +6,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { SaturnBot } from "../..";
 
-export class ClanCommandUser implements SaturnSubCommand {
+export class ClanCommandUser {
     makeSubCommand(): SlashCommandSubcommandBuilder {
         return new SlashCommandSubcommandBuilder()
             .setName("user").setDescription("Gets guild information about the specified user, or the command sender")
