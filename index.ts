@@ -1,5 +1,5 @@
 import { Client, REST } from 'discord.js';
-import { SaturnInteractions } from './api/Interactions';
+import { SaturnEvents } from './api/SaturnEvents';
 import 'dotenv/config'
 
 export class SaturnBot {
@@ -19,12 +19,11 @@ export class SaturnBot {
     this.client.login(process.env.TOKEN || "");
   }
   
-  public static spawnIn() {
-    SaturnInteractions.loadHandlers().then(() => {
-      SaturnInteractions.startListening()
-    });
+  public static async spawnIn() {
+    await SaturnEvents.loadHandlers()
+    SaturnEvents.startListening()
 
-    SaturnBot.INSTANCE.client.on('ready', client => {
+    SaturnBot.INSTANCE.client.on('ready', () => {
       console.log("Bot successfully loaded")
     });
     

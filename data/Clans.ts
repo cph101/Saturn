@@ -1,5 +1,5 @@
-import { ApiUtil, InteractionReplyable } from "../ApiUtil";
-import { SaturnBot } from "../..";
+import { ApiUtil, InteractionReplyable } from "./ApiUtil";
+import { SaturnBot } from "..";
 
 import axios from "axios";
 import * as fs from "node:fs/promises";

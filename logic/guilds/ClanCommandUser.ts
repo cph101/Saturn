@@ -1,5 +1,5 @@
 import { ApplicationEmoji, ChatInputCommandInteraction, EmbedBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandUserOption, SnowflakeUtil, User, UserManager } from "discord.js";
-import { ApiUtil } from "../ApiUtil";
+import { ApiUtil } from "../../data/ApiUtil";
 
 import axios from "axios";
 import * as fs from "node:fs/promises";
