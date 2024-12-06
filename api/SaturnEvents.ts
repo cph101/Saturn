@@ -1,38 +1,49 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { EventHandler } from "./EventHandler";
-import { ClientEvents, Routes } from "discord.js";
+import { ClientEvents, Routes, SlashCommandBuilder } from "discord.js";
 import { SaturnBot } from "..";
-import { CommandHandler } from "./CommandHandler";
+import { CommandLikeHandler } from "./command/CommandLikeHandler";
 
 export class SaturnEvents {
 
     private static handlers: {
-        [K in keyof ClientEvents]?: (new (...args: any[]) => EventHandler<K>)[];
-    } = {};    
+        [K in keyof ClientEvents]?: (new () => EventHandler<K>)[];
+    } = {};
 
     static async startListening() {
 
         let commands = [];
 
         Object.entries(this.handlers).forEach(handlerData => {
-            if (handlerData instanceof CommandHandler) {
-                commands.push((handlerData as CommandHandler).makeCommand().toJSON());
+            for (const possibleHandlerClass of handlerData[1]) {
+                const possibleHandler: EventHandler<any> = new possibleHandlerClass();
+                if (possibleHandler instanceof CommandLikeHandler) {
+                    const representation = possibleHandler.buildRepresentable();
+                    if (representation instanceof SlashCommandBuilder) {
+                        commands.push(representation.toJSON());
+                    }
+                }
+    
             }
+        })
+
+        await SaturnBot.INSTANCE.api.put(
+            Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
+        );
+
+        Object.entries(this.handlers).forEach(handlerData => {
             SaturnBot.INSTANCE.client.on(handlerData[0], async event => {
                 for (const possibleHandlerClass of handlerData[1]) {
                     const possibleHandler: EventHandler<any> = new possibleHandlerClass();
                     if (possibleHandler.canHandle(event)) {
+                        console.log(`Attempting to use ${possibleHandlerClass}`)
                         possibleHandler.handle(event);
                         break;
                     }
                 }
             });
         })
-
-        SaturnBot.INSTANCE.api.put(
-			Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
-		);
     }
 
     static async loadHandlers(): Promise<void> {
