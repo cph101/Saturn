@@ -32,7 +32,7 @@ export class ApplyButtonHandler extends EventHandler<"interactionCreate"> {
         ClanApplyStorage.cache(interaction, uuid)
 
         const clan = new StringSelectMenuBuilder()
-            .setCustomId('applyToClan::' + uuid)
+            .setCustomId('applyToClanForm::' + uuid)
             .setPlaceholder('Choose a guild')
             .addOptions(
                 Clans.getClanMemberCounts()
@@ -52,8 +52,8 @@ export class ApplyButtonHandler extends EventHandler<"interactionCreate"> {
 
         // TODO: find out why this is happening, might be perms
         // Add a perms parameter to EventSubscriber (see big A refactor)
-        const user = await interaction.guild.members.fetch(interaction.user)
-        console.log(user.roles.cache.hasAny(...ApplyButtonHandler.whitelistedRoles))
+        //const user = await interaction.guild.members.fetch(interaction.user)
+        //console.log(user.roles.cache.hasAny(...ApplyButtonHandler.whitelistedRoles))
         
         interaction.reply({
             content: 'Which guild would you like to apply to?',
@@ -63,8 +63,13 @@ export class ApplyButtonHandler extends EventHandler<"interactionCreate"> {
 
     }
 
+    handledEvent(): "interactionCreate" {
+        return "interactionCreate";
+    }
+
+
     async canHandle(interaction: Interaction) {
-        if (interaction.isButton() && interaction instanceof ButtonInteraction) {
+        if (interaction.isButton()) {
             return interaction.customId == "clanCandidateApplyButton";
         } else return false;
     }

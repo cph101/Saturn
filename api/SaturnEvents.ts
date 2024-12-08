@@ -1,9 +1,10 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { EventHandler } from "./EventHandler";
-import { ClientEvents, Routes, SlashCommandBuilder } from "discord.js";
+import { ClientEvents, Routes, SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js";
 import { SaturnBot } from "..";
 import { CommandLikeHandler } from "./command/CommandLikeHandler";
+import { CommandTreeHandler } from "./command/CommandTreeHandler";
 
 export class SaturnEvents {
 
@@ -12,32 +13,13 @@ export class SaturnEvents {
     } = {};
 
     static async startListening() {
-
-        let commands = [];
-
-        Object.entries(this.handlers).forEach(handlerData => {
-            for (const possibleHandlerClass of handlerData[1]) {
-                const possibleHandler: EventHandler<any> = new possibleHandlerClass();
-                if (possibleHandler instanceof CommandLikeHandler) {
-                    const representation = possibleHandler.buildRepresentable();
-                    if (representation instanceof SlashCommandBuilder) {
-                        commands.push(representation.toJSON());
-                    }
-                }
-    
-            }
-        })
-
-        await SaturnBot.INSTANCE.api.put(
-            Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
-        );
-
         Object.entries(this.handlers).forEach(handlerData => {
             SaturnBot.INSTANCE.client.on(handlerData[0], async event => {
                 for (const possibleHandlerClass of handlerData[1]) {
+                    //console.info(`Testing candidate ${possibleHandlerClass.name}`)
                     const possibleHandler: EventHandler<any> = new possibleHandlerClass();
-                    if (possibleHandler.canHandle(event)) {
-                        console.log(`Attempting to use ${possibleHandlerClass}`)
+                    if (await possibleHandler.canHandle(event)) {
+                        //console.info(`Attempting to use ${possibleHandlerClass.name}`)
                         possibleHandler.handle(event);
                         break;
                     }
@@ -67,6 +49,34 @@ export class SaturnEvents {
                 }
             }
         }
+
+        let commands = [];
+
+        Object.entries(this.handlers).forEach(handlerData => {
+            for (const possibleHandlerClass of handlerData[1]) {
+                // Instantiante handler and create representation
+                const possibleHandler: EventHandler<any> = new possibleHandlerClass();
+                if (possibleHandler instanceof CommandLikeHandler) {
+                    var representation = possibleHandler.buildRepresentable();
+                    if (representation instanceof SlashCommandBuilder) {
+                        // Add subcommands if applicable
+                        if (possibleHandler instanceof CommandTreeHandler) {
+                            possibleHandler.subcommands().forEach(sub => {
+                                representation = (representation as SlashCommandBuilder)
+                                    .addSubcommand(new sub().buildRepresentable())
+                            });
+                        }
+                        // Add command to list
+                        commands.push(representation)
+                    }
+                }
+    
+            }
+        })
+
+        await SaturnBot.INSTANCE.api.put(
+            Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
+        );
     }
 
     private static async getAllFiles(dir: string, files: string[] = []): Promise<string[]> {

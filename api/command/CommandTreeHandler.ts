@@ -1,5 +1,6 @@
 import { 
     ChatInputCommandInteraction, EmbedBuilder, 
+    Interaction, 
     SlashCommandBuilder
 } from "discord.js";
 
@@ -11,7 +12,14 @@ export abstract class CommandTreeHandler extends CommandLikeHandler {
     abstract buildRepresentable(): SlashCommandBuilder
 
     abstract subcommands(): (new () => SubCommandHandler)[]
-    
+
+    async canHandle(interaction: Interaction) {
+        if (super.canHandle(interaction)) {
+            const sub = (interaction as ChatInputCommandInteraction).options?.getSubcommand();
+            return this.subcommandInstances().find(a => sub == a.buildRepresentable().name) != null;
+        } else return false;
+    }
+
     async handleCommand(interaction: ChatInputCommandInteraction) {
         const sub = interaction.options.getSubcommand();
         const handler = this.subcommandInstances().find(handler => 
@@ -32,5 +40,5 @@ export abstract class CommandTreeHandler extends CommandLikeHandler {
         return this.subcommands().map(handlerClass => {
             return new handlerClass()
         })
-    }
+    } 
 }

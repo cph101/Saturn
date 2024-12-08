@@ -30,7 +30,7 @@ export class GuildsListHandler extends SubCommandHandler {
             }\`** (\`${members} / 200\`)\n`;
         });
 
-        clanList += "\n <:info:1312840063276548207> **Note: Only level 30 members or server boosters may join guilds.**"
+        clanList += "\n <:info:1312840063276548207> **Note: Only level 20 members or server boosters may join guilds.**"
 
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor(0x3567a3)

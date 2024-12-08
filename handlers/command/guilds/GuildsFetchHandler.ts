@@ -21,8 +21,8 @@ export class GuildsFetchHandler extends SubCommandHandler {
     }
 
     async handleCommand(interaction: ChatInputCommandInteraction) {
-        const id: string = interaction.options.getString("id") 
-        ?? (interaction.options.getUser("name") ?? interaction.user).id;
+        const id: string = interaction.options?.getString("id") 
+        ?? (interaction.options?.getUser("name") ?? interaction.user).id;
 
         const user: User = await this.getUser(id, interaction)
 

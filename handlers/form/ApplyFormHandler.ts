@@ -1,9 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuInteraction, TextBasedChannel } from "discord.js";
-import { ClanApplyStorage, Clans } from "../../../data/Clans";
+import { 
+    Interaction, StringSelectMenuInteraction, 
+    ActionRowBuilder, ButtonBuilder, ButtonStyle 
+} from "discord.js";
 
-export class ClanApply {
+import { EventHandler } from "../../api/EventHandler";
+import { ClanApplyStorage, Clans } from "../../data/Clans";
 
-    public static async applyToClan(interaction: StringSelectMenuInteraction) {
+export class ApplyFormHandler extends EventHandler<"interactionCreate"> {
+
+    async handle(interaction: StringSelectMenuInteraction) {
         const selectedClan = Clans.getClanMemberCounts()[Number.parseInt(interaction.values[0])]
         const invite = "https://discord.gg/" + selectedClan.clan.invite;
 
@@ -26,4 +31,14 @@ export class ClanApply {
         interaction.deferUpdate()
     }
 
+    handledEvent(): "interactionCreate" {
+        return "interactionCreate";
+    }
+
+    async canHandle(interaction: Interaction) {
+        if (interaction.isStringSelectMenu()) {
+            return interaction.customId.split("::")[0] == "applyToClanForm";
+        } else return false;
+    }
+    
 }
