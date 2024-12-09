@@ -65,7 +65,8 @@ export class Clans {
             if (errorData && axiosError.response.status != 401) {
                 builder.setDescription(`Discord returned error "${errorData['message']}", code ${errorData['code']}`)
             }
-
+            
+            return true;
         });
     }
 }

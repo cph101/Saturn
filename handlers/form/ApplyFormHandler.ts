@@ -9,6 +9,10 @@ import { ClanApplyStorage, Clans } from "../../data/Clans";
 export class ApplyFormHandler extends EventHandler<"interactionCreate"> {
 
     async handle(interaction: StringSelectMenuInteraction) {
+        if (Clans.lastUpdated <= (Date.now() - (1000 * 60 * 90))) {
+            await Clans.refreshCache(interaction); 
+        }
+
         const selectedClan = Clans.getClanMemberCounts()[Number.parseInt(interaction.values[0])]
         const invite = "https://discord.gg/" + selectedClan.clan.invite;
 
@@ -18,16 +22,10 @@ export class ApplyFormHandler extends EventHandler<"interactionCreate"> {
 
         const oldInteraction = ClanApplyStorage.query(interaction.customId?.split("::")[1]);
 
-        let humanReadableName = selectedClan.clan.name;
-
-        if (selectedClan.clan.id == "966137238880682145") {
-            // long ass symbols guild
-            humanReadableName = `Long, aka ${humanReadableName.slice(0, 1)}...`;
-        }
-
-        const content = `**${humanReadableName}** selected. Click below to join:`
+        const content = `**${selectedClan.clan.name}** selected. Click below to join:`
 
         oldInteraction.editReply({ content, components: [actionRow] })
+
         interaction.deferUpdate()
     }
 

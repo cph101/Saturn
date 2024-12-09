@@ -20,7 +20,11 @@ export class SaturnEvents {
                     const possibleHandler: EventHandler<any> = new possibleHandlerClass();
                     if (await possibleHandler.canHandle(event)) {
                         //console.info(`Attempting to use ${possibleHandlerClass.name}`)
-                        possibleHandler.handle(event);
+                        try {
+                            possibleHandler.handle(event);
+                        } catch (error) {
+                            console.error(error) // prevent fatal
+                        }
                         break;
                     }
                 }
@@ -29,6 +33,8 @@ export class SaturnEvents {
     }
 
     static async loadHandlers(): Promise<void> {
+
+        this.handlers = {}
 
         const files = await this.getAllFiles("dist/handlers");
 

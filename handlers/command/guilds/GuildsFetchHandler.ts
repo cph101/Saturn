@@ -74,7 +74,7 @@ export class GuildsFetchHandler extends SubCommandHandler {
 
         if (userID == null) return null;
 
-        return await ApiUtil.wrapAxiosWithEmbedError(interaction, async function () {
+        return await ApiUtil.wrapAxiosWithEmbedError(interaction, async () => {
             const response = await axios.get(
                 `https://discord.com/api/v9/users/${userID}/profile`, {
                 headers: {
@@ -83,14 +83,16 @@ export class GuildsFetchHandler extends SubCommandHandler {
             });
 
             return response.data.user;
-        }, function (builder, axiosError) {
+        }, (builder, axiosError) => {
             const errorData = axiosError.response.data;
 
             if (errorData && axiosError.response.status != 401) {
                 if (errorData["code"] == 10013) {
                     builder.setDescription(`User "${userID}" not found..`)
+                    return false;
                 } else {
                     builder.setDescription(`Discord returned error "${errorData['message']}", code ${errorData['code']}`)
+                    return true;
                 }
             }
 

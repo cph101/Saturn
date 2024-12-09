@@ -3,6 +3,7 @@ import { CommandTreeHandler } from "../../api/command/CommandTreeHandler";
 import { SubCommandHandler } from "../../api/command/SubCommandHandler";
 import { GuildsListHandler } from "./guilds/GuildsListHandler";
 import { GuildsFetchHandler } from "./guilds/GuildsFetchHandler";
+import { GuildsAcceptHandler } from "./guilds/GuildsAcceptHandler";
 
 export class GuildsCommandHandler extends CommandTreeHandler {
 
@@ -12,6 +13,6 @@ export class GuildsCommandHandler extends CommandTreeHandler {
     }
 
     subcommands(): (new () => SubCommandHandler)[] {
-        return [GuildsListHandler, GuildsFetchHandler];
+        return [GuildsListHandler, GuildsFetchHandler, GuildsAcceptHandler];
     }
 }

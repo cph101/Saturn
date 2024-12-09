@@ -13,7 +13,7 @@ export class ApiUtil {
     static async wrapAxiosWithEmbedError<T>(
         interaction: InteractionReplyable,
         func: () => T,
-        errorhandler: (embed: EmbedBuilder, error: AxiosError) => void = function () {}
+        errorhandler: (embed: EmbedBuilder, error: AxiosError) => boolean = function () { return false; }
     ) {
         try {
             return await func();
@@ -30,9 +30,11 @@ export class ApiUtil {
                 embed.setTitle("Error: Server did not respond");
             }
     
-            errorhandler(embed, error);
+            const shouldPing = errorhandler(embed, error);
 
-            embed.setDescription("**" + embed.toJSON().description + "**. <@1118834539452706867>, wake up!");
+            const desc = !shouldPing ? embed.toJSON().description 
+                : "**" + embed.toJSON().description + "**. <@1118834539452706867>, wake up!"
+            embed.setDescription(desc);
             interaction.reply({ embeds: [embed] });
         }
     }    

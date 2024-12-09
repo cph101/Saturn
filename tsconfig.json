@@ -3,7 +3,7 @@
     "lib": [ "ES2023" ],
     "module": "CommonJS",
     "target": "ES2023",
-    "outDir": "output",
+    "outDir": "dist",
     "moduleResolution": "node",
     "sourceMap": false,
     "experimentalDecorators": true
