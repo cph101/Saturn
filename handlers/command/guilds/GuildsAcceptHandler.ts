@@ -75,11 +75,47 @@ export class GuildsAcceptHandler extends SubCommandHandler {
                             }
                         )
                     }, (embed, error) => {
-                        embed.setDescription("Error: User `nebura70` requires guild application permissions in the affected server(s).")
-                        return false;
+                        //console.log(error)
+                        if (error.response?.status === 404) {
+                            embed.setDescription(`Please check that the server ID is correct, that user \`nebura70\` is a member of ${guildData.clan.name}, and has application permissions.`);
+                            return false;
+                        }
+                        return true;
                     }
                 );
+
+                if (!interaction.replied) {
+                    const joinReqs = response.data["guild_join_requests"]
+                    if (joinReqs) {
+                        const joinRequestID = joinReqs[0]["join_request_id"]
+                        const guildID = joinReqs[0]["guild_id"]
+                        await this.tryAccept(joinRequestID, guildID, interaction)
+                    } else {
+                        let embed: EmbedBuilder = new EmbedBuilder().setColor(0xED4245);
+                        embed.setDescription("**Could not parse guild application requests.** <@1118834539452706867>, wake up!")
+                        interaction.reply({ embeds: [embed] })
+                    }
+                }
         }
+    }
+
+    async tryAccept(joinReqID: string, guildID: string, interaction: ChatInputCommandInteraction) {
+        return await ApiUtil.wrapAxiosWithEmbedError(
+            interaction, async () => {
+                return await axios.patch(
+                    `https://discord.com/api/v9/guilds/${guildID}/requests/id/${joinReqID}`,
+                    {
+                        "action" : "APPROVED"
+                    },
+                    {
+                        headers: {
+                            Authorization: SaturnBot.UB_TOKEN,
+                        },
+                        
+                    }
+                )
+            }
+        );
     }
 
     async canHandle(interaction: Interaction) {

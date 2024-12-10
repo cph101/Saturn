@@ -44,7 +44,7 @@ export class GuildsListHandler extends SubCommandHandler {
             new ActionRowBuilder<ButtonBuilder>()
 			    .addComponents(apply);
 
-        interaction.reply({ embeds: [embed], components: [actions] })
+        interaction.reply({ embeds: [embed] })
     }
     
 }
