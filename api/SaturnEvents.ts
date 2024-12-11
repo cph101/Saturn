@@ -80,7 +80,7 @@ export class SaturnEvents {
             }
         })
 
-        await SaturnBot.INSTANCE.api.put(
+        await SaturnBot.INSTANCE.API.put(
             Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
         );
     }
