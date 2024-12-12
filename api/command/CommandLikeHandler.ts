@@ -16,11 +16,8 @@ export abstract class CommandLikeHandler extends EventHandler<"interactionCreate
     }
 
     async canHandle(interaction: Interaction) {
-        if (
-            interaction.isChatInputCommand()
-            && interaction instanceof ChatInputCommandInteraction
-        ) {
-           return (interaction as ChatInputCommandInteraction).commandName == this.buildRepresentable.name
+        if (interaction.isChatInputCommand()) {
+           return interaction.commandName == this.buildRepresentable().name
         } else return false;
     }
 

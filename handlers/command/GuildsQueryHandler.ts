@@ -1,27 +1,24 @@
 import {
-    SlashCommandSubcommandBuilder, ChatInputCommandInteraction, User,
-    ApplicationEmoji, EmbedBuilder, SlashCommandUserOption, SlashCommandStringOption,
-    Routes,
-    Snowflake,
-    REST
+    ChatInputCommandInteraction, User, EmbedBuilder, 
+    SlashCommandUserOption, SlashCommandStringOption,
+    SlashCommandBuilder,
+    SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
-
-import { SubCommandHandler } from "../../../api/command/SubCommandHandler";
-import { SaturnBot } from "../../..";
-import { ApiUtil } from "../../../data/ApiUtil";
 
 import axios from "axios";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { URoutes } from "../../../api/URoutes";
-import { ExtendedUser } from "../../../api/user/ExtendedUser";
-import { ClanDetails } from "../../../api/clan/ClanDetails";
+import { CommandLikeHandler } from "../../api/command/CommandLikeHandler";
+import { ExtendedUser } from "../../api/user/ExtendedUser";
+import { ClanDetails } from "../../api/clan/ClanDetails";
+import { ApiUtil } from "../../data/ApiUtil";
+import { SaturnBot } from "../..";
 
-export class GuildsFetchHandler extends SubCommandHandler {
+export class GuildsQueryHandler extends CommandLikeHandler {
 
-    buildRepresentable(): SlashCommandSubcommandBuilder {
-        return new SlashCommandSubcommandBuilder()
-            .setName("fetch").setDescription("Gets guild information about a specified user, or the command sender")
+    buildRepresentable(): SlashCommandOptionsOnlyBuilder {
+        return new SlashCommandBuilder().setName("query")
+            .setDescription("Gets guild information about a specified user, or the command sender")
             .addUserOption(new SlashCommandUserOption().setName("name").setDescription("User name to get guild info about").setRequired(false))
             .addStringOption(new SlashCommandStringOption().setName("id").setDescription("User id to get guild info about").setRequired(false))
     }

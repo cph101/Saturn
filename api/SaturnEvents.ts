@@ -16,10 +16,10 @@ export class SaturnEvents {
         Object.entries(this.handlers).forEach(handlerData => {
             SaturnBot.INSTANCE.client.on(handlerData[0], async event => {
                 for (const possibleHandlerClass of handlerData[1]) {
-                    //console.info(`Testing candidate ${possibleHandlerClass.name}`)
+                    if (SaturnBot.DEBUG_MODE) console.info(`Testing candidate ${possibleHandlerClass.name}`)
                     const possibleHandler: EventHandler<any> = new possibleHandlerClass();
                     if (await possibleHandler.canHandle(event)) {
-                        //console.info(`Attempting to use ${possibleHandlerClass.name}`)
+                        if (SaturnBot.DEBUG_MODE) console.info(`Attempting to use ${possibleHandlerClass.name}`)
                         try {
                             possibleHandler.handle(event);
                         } catch (error) {

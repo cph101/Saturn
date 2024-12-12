@@ -1,14 +1,13 @@
 import { Interaction, AutocompleteInteraction } from "discord.js";
 import { EventHandler } from "../../api/EventHandler";
-import { GuildsAcceptHandler } from "../command/guilds/GuildsAcceptHandler";
 import { Clans } from "../../data/Clans";
-import { GuildsCommandHandler } from "../command/GuildsCommandHandler";
+import { GuildsAcceptHandler } from "../command/GuildsAcceptHandler";
 
 export class GuildsACHandler extends EventHandler<"interactionCreate"> {
 
     async handle(interaction: AutocompleteInteraction) {
         if (Clans.lastUpdated <= (Date.now() - (1000 * 60 * 90))) {
-            await Clans.refreshCache(null); 
+            await Clans.refreshCache(null);
         }
 
         interaction.respond(
@@ -23,9 +22,8 @@ export class GuildsACHandler extends EventHandler<"interactionCreate"> {
     }
 
     async canHandle(interaction: Interaction) {
-        return interaction.isAutocomplete() 
-            && interaction.commandName == new GuildsCommandHandler().buildRepresentable().name
-            && interaction.options.getSubcommand() == new GuildsAcceptHandler().buildRepresentable().name;
+        return interaction.isAutocomplete()
+            && interaction.commandName == new GuildsAcceptHandler().buildRepresentable().name;
     }
     
 }

@@ -4,7 +4,8 @@
   "description": "Bot for Solarplanet",
   "main": "dist/compiled.js",
   "scripts": {
-    "compile": "tsc",
+    "refresh": "npm run compile; npm run main",
+    "compile": "rm -fr dist; tsc",
     "main": "node dist/index.js"
   },
   "author": "cph101",

@@ -1,20 +1,20 @@
 import { 
-    SlashCommandSubcommandBuilder, ChatInputCommandInteraction, 
-    EmbedBuilder, ButtonBuilder, ActionRowBuilder 
+    ChatInputCommandInteraction, 
+    EmbedBuilder, SlashCommandBuilder
 } from "discord.js";
 
-import { SubCommandHandler } from "../../../api/command/SubCommandHandler";
-import { Clans } from "../../../data/Clans";
-import { ApplyButtonHandler } from "../../button/ApplyButtonHandler";
+import { Clans } from "../../data/Clans";
+import { CommandLikeHandler } from "../../api/command/CommandLikeHandler";
 
-export class GuildsListHandler extends SubCommandHandler {
+export class GuildsListHandler extends CommandLikeHandler {
 
-    buildRepresentable(): SlashCommandSubcommandBuilder {
-        return new SlashCommandSubcommandBuilder()
+    buildRepresentable(): SlashCommandBuilder {
+        return new SlashCommandBuilder()
             .setName("list").setDescription("Lists Solarplanet Guilds")
     }
 
     async handleCommand(interaction: ChatInputCommandInteraction) {
+
         var clanList: string = "";
 
         // Return new response if last checked 1 1/2 hours ago or more
@@ -27,22 +27,18 @@ export class GuildsListHandler extends SubCommandHandler {
 
             clanList += `\`${index + 1}\` <:guild${index + 1}icon:${clan.icon}> **\`#${
                 clan.name.toUpperCase()
-            }\`** (\`${members} / 200\`)\n`;
+            }\`** (\`${clan.id}\`) - **${members} / 200**\n`;
         });
-
-        clanList += "\n <:info:1312840063276548207> **Note: Only level 20 members or server boosters may join guilds.**"
 
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor(0x3567a3)
             .setTitle("Solarplanet guilds <:solarplanet1:1311064940404146206>"
                 + "<:solarplanet1:1311065266201038899>")
             .setDescription(clanList)
-
-        const apply: ButtonBuilder = ApplyButtonHandler.buildRepresentable()
-
-        const actions: ActionRowBuilder<ButtonBuilder> = 
-            new ActionRowBuilder<ButtonBuilder>()
-			    .addComponents(apply);
+            .setFooter({
+                iconURL: "https://cdn.discordapp.com/icons/1244682239187619940/1daabaf95feb6c2463ca8b7cfc951896.webp",
+                text: "discord.gg/solarplanet"
+            })
 
         interaction.reply({ embeds: [embed] })
     }

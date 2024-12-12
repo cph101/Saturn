@@ -1,4 +1,4 @@
-import { Client, REST } from 'discord.js';
+import { Client, Guild, REST } from 'discord.js';
 import 'dotenv/config'
 import { SaturnEvents } from './api/SaturnEvents';
 
@@ -7,10 +7,12 @@ export class SaturnBot {
   public static CLIENT_ID: string = process.env.CLIENT_ID || "";
   public static UB_TOKEN: string = process.env.UB_TOKEN || "";
 
+  public static DEBUG_MODE = false;
+
   public API: REST = new REST({ version: '10' });
   // @ts-expect-error
   public uAPI: REST = new REST({ version: '9', authPrefix: "" });
-  public client: Client = new Client({ intents: [] })
+  public client: Client = new Client({ intents: ['Guilds', 'GuildMessages', 'MessageContent'] })
 
   private constructor() {
     if (process.env.TOKEN == null) console.log("Token not found");
@@ -26,7 +28,7 @@ export class SaturnBot {
     await SaturnEvents.loadHandlers()
     SaturnEvents.startListening()
 
-    SaturnBot.INSTANCE.client.on('ready', () => {
+    SaturnBot.INSTANCE.client.on('ready', async () => {
       console.log("Bot successfully loaded")
     });
     
