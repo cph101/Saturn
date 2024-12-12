@@ -5,8 +5,8 @@
   "main": "dist/compiled.js",
   "scripts": {
     "refresh": "npm run compile; npm run main",
-    "compile": "rm -fr dist; tsc",
-    "main": "node dist/index.js"
+    "compile": "rm -fr dist; tsc; rm -fr resources/*",
+    "main": "mv resdist/* resources/; node dist/index.js"
   },
   "author": "cph101",
   "license": "ARR",
