@@ -48,7 +48,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
     
         const args = message.content.split(" ");
         const guild = args[2];
-        const member = args[1].replaceAll("<@", "").replaceAll(">", "");
+        const member = args[1]?.replaceAll("<@", "").replaceAll(">", "");
     
         if (!guild) return;
     

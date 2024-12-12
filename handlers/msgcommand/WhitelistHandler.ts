@@ -58,6 +58,20 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                     }
                     break setContent;
                 }
+
+                const promMaybe = message.content.match(/^,(whitelist|wl) promote (<@!?(\d{17,20})>|\d{17,20})$/);
+                if (promMaybe) {
+                    const userId = promMaybe[3] || promMaybe[2];
+                    const output = await SuperUsers.promoteToFounder(userId);
+                    if (output == 0) {
+                        embed.setDescription(`User <@${userId}> is not on the whitelist.`);
+                    } else if (output == 1) {
+                        embed.setDescription(`User <@${userId}> is already a \`FOUNDER\`.`);
+                    } else {
+                        embed.setDescription(`User <@${userId}> was promoted to \`FOUNDER\`.`);
+                    }
+                    break setContent;
+                }
                 return;
             }
         } else {

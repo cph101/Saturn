@@ -35,11 +35,36 @@ export class SuperUsers {
         if (existingUser) return false;
         this.users.push({ rankType: "STAFF", id: userId });
 
-        const newUserEntry = `\STAFF ${userId}`;
+        const newUserEntry = `\nSTAFF ${userId}`;
 
         await fs.appendFile(path.resolve("resources/whitelist.db"), newUserEntry, { encoding: "utf8" });
         return true;
     }
+
+    public static async promoteToFounder(userId: string): Promise<number> {
+        const existingUserIndex = this.users.findIndex((user) => user.id === userId);
+    
+        if (existingUserIndex === -1) {
+            return 0;
+        }
+    
+        const existingUser = this.users[existingUserIndex];
+    
+        if (existingUser.rankType === "FOUNDER") {
+            return 1;
+        }
+    
+        this.users[existingUserIndex].rankType = "FOUNDER";
+    
+        const updatedContent = this.users
+            .map((user) => `${user.rankType} ${user.id}`)
+            .join("\n");
+    
+        await fs.writeFile(path.resolve("resources/whitelist.db"), updatedContent, { encoding: "utf8" });
+    
+        return 2;
+    }
+    
 
     public static async removeUser(userId: string): Promise<number> {
         const existingUserIndex = this.users.findIndex((user) => user.id === userId);

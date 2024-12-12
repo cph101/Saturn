@@ -41,7 +41,7 @@ export class ListHandler extends EventHandler<"messageCreate"> {
                 }\`** - **${members} / 200**\n`;
             });
 
-            embed.setTitle("GUILDS")
+            embed.setTitle("GUILD LIST")
             .setDescription(clanList)
         } else {
             embed.setColor(0xED4245);
