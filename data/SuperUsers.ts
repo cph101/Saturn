@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises"
 import * as path from "path"
 
-type RankType = "OWNER" | "ADMIN"
+type RankType = "FOUNDER" | "STAFF"
 
 export class SuperUsers {
 
@@ -33,9 +33,9 @@ export class SuperUsers {
         const existingUser = this.users.find((user) => user.id === userId);
 
         if (existingUser) return false;
-        this.users.push({ rankType: "ADMIN", id: userId });
+        this.users.push({ rankType: "STAFF", id: userId });
 
-        const newUserEntry = `\nADMIN ${userId}`;
+        const newUserEntry = `\STAFF ${userId}`;
 
         await fs.appendFile(path.resolve("resources/whitelist.db"), newUserEntry, { encoding: "utf8" });
         return true;
@@ -48,7 +48,7 @@ export class SuperUsers {
 
         const existingUser = this.users[existingUserIndex];
 
-        if (existingUser.rankType !== "ADMIN") return 1;
+        if (existingUser.rankType !== "STAFF") return 1;
 
 
         this.users.splice(existingUserIndex, 1);

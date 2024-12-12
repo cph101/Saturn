@@ -1,28 +1,64 @@
 {
     "values": [
         {
+            "id": "1200589983115911340",
+            "invite": "hTBKpAHQ8x",
+            "name": "AURA",
+            "icon": "1311969845398470698"
+        },
+        {
+            "id": "2",
+            "invite": "ZznSeaMpyh",
+            "name": "$$$",
+            "icon": "1316493537852002418"
+        },
+        {
+            "id": "3",
+            "invite": "ZkmZRE6YN3",
+            "name": ":3",
+            "icon": "1313750731215605792"
+        },
+        {
+            "id": "4",
+            "invite": "CHz7hUuf",
+            "name": "???",
+            "icon": "1314465010663161957"
+        },
+        {
             "id": "1034280738129989704",
             "invite": "pbvUfcUBRe",
-            "name": "Hail",
-            "icon": "1311067084926746735"
+            "name": "HAIL",
+            "icon": "1311970450112249896"
         },
         {
-            "id": "1200589983115911340",
-            "invite": "solaraura",
-            "name": "Aura",
-            "icon": "1311066638593953903"
+            "id": "6",
+            "invite": "weight",
+            "name": "ESEX",
+            "icon": "1316681078685175830"
         },
         {
-            "id": "1087810644432138300",
-            "invite": "nikogods",
-            "name": "Gods",
-            "icon": "1311066259307102228"
+            "id": "7",
+            "invite": "twenty",
+            "name": ":(",
+            "icon": "1316681352774418514"
         },
         {
-            "id": "966137238880682145",
+            "id": "8",
             "invite": "solarlong",
             "name": "Long / ﷽",
-            "icon": "1311086547432378471"
+            "icon": "1311970258390876160"
+        },
+        {
+            "id": "9",
+            "invite": "nikogods",
+            "name": "GODS",
+            "icon": "1311970909732605952"
+        },
+        {
+            "id": "10",
+            "invite": "solarplanet",
+            "name": ">.<",
+            "icon": "1316681078685175830"
         }
     ]
 }

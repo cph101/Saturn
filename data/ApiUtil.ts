@@ -37,6 +37,10 @@ export class ApiUtil {
             embed.setDescription(desc);
             interaction.reply({ embeds: [embed] });
         }
-    }    
+    }
+
+    static sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
 }

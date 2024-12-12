@@ -46,8 +46,8 @@ export class Clans {
     
 
     private static async getClanMemberCount(guildID: string, interaction: InteractionReplyable): Promise<number> {
-
         if (guildID == null) return null;
+        if (guildID.length > 20 || guildID.length < 17) return 0;
 
         return await ApiUtil.wrapAxiosWithEmbedError(interaction, async function () {
             const response = await axios.get(

@@ -6,82 +6,73 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
 
     async handle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
         await SuperUsers.refreshUsers();
-        const users = SuperUsers.getUsers()
-
+        const users = SuperUsers.getUsers();
+    
         const author: EmbedAuthorOptions = {
             name: message.author.username,
             iconURL: message.author.avatarURL()
-        }
-
-        const footer: EmbedFooterOptions = {
-            iconURL: "https://cdn.discordapp.com/icons/1244682239187619940/1daabaf95feb6c2463ca8b7cfc951896.webp",
-            text: "discord.gg/solarplanet"
-        }
-
+        };
+    
         let embed: EmbedBuilder = new EmbedBuilder()
-            .setFooter(footer)
-            .setColor(0x3567a3)
+            .setColor(0xFFFFFF)
             .setAuthor(author);
-
+    
         if (Object.keys(users).includes(message.author.id)) {
             setContent: {
-                if (users[message.author.id] != "OWNER") {
+                if (users[message.author.id] != "FOUNDER") {
                     embed.setColor(0xED4245);
-                    embed.setDescription("Error: you have access to admin commands but do not posess the `OWNER` rank.")
+                    embed.setDescription("Error: you have access to admin commands but do not possess the `FOUNDER` rank.");
                     break setContent;
                 } 
-                if (message.content == "!whitelist ranks") {
+                if (message.content.match(/^,(whitelist|wl) ranks$/)) {
                     let description = "";
-
+    
                     for (const user in users) {
-                        description += `- <@${user}>: ${users[user]}\n`
+                        description += `- <@${user}>: ${users[user]}\n`;
                     }
-                    embed.setDescription(description)
+                    embed.setDescription(description);
                     break setContent;
                 }
-                const addMaybe = message.content.match(/^!whitelist add (\d{17,20})$/)
+                const addMaybe = message.content.match(/^,(whitelist|wl) add (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (addMaybe) {
-                    const success = await SuperUsers.addAdmin(addMaybe[1])
+                    const userId = addMaybe[3] || addMaybe[2];
+                    const success = await SuperUsers.addAdmin(userId);
                     if (success) {
-                        embed.setDescription(`User <@${addMaybe[1]}> was added to the whitelist`)
+                        embed.setDescription(`User <@${userId}> was added to the whitelist.`);
                     } else {
-                        embed.setDescription(`User <@${addMaybe[1]}> was already on the whitelist`)
+                        embed.setDescription(`User <@${userId}> was already on the whitelist.`);
                     }
                     break setContent;
                 }
-
-                const remMaybe = message.content.match(/^!whitelist remove (\d{17,20})$/)
+    
+                const remMaybe = message.content.match(/^,(whitelist|wl) remove (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (remMaybe) {
-                    const output = await SuperUsers.removeUser(remMaybe[1])
+                    const userId = remMaybe[3] || remMaybe[2];
+                    const output = await SuperUsers.removeUser(userId);
                     if (output == 0) {
-                        embed.setDescription(`User <@${remMaybe[1]}> was never on the whitelist to begin with :P`)
+                        embed.setDescription(`User <@${userId}> was never on the whitelist to begin with :P`);
                     } else if (output == 1) {
-                        embed.setDescription(`User <@${remMaybe[1]}> has rank \`OWNER\` and can only be removed by GOD!!`)
+                        embed.setDescription(`User <@${userId}> has rank \`FOUNDER\` and can only be removed by GOD!!`);
                     } else {
-                        embed.setDescription(`User <@${remMaybe[1]}> was successfully removed from the whitelist. Rest in peices, <@${remMaybe[1]}>!`)
+                        embed.setDescription(`User <@${userId}> was successfully removed from the whitelist. Rest in pieces, <@${userId}>!`);
                     }
                     break setContent;
                 }
-
-                
-                embed.setTitle("!whitelist usage")
-                embed.setDescription(`
-                    - **whitelist ranks**: Logs all whitelisted users and their rank\n- **whitelist add** \`userID\`: Set a user as whitelisted\n- **whitelist remove** \`userID\`: Remove a user from the whitelist.
-                `)
+                return;
             }
         } else {
             embed.setColor(0xED4245);
-            embed.setTitle("Error: you do not have access to admin commands")
+            embed.setTitle("Error: you do not have access to admin commands");
         }
-        message.reply({ embeds: [embed] })
-    }
+        message.reply({ embeds: [embed] });
+    }    
 
     handledEvent(): "messageCreate" {
         return "messageCreate";
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content.slice(0, 10) == "!whitelist"
+        return message.content.startsWith(",whitelist") || message.content.startsWith(",wl")
     }
 
 }

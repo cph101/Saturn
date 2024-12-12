@@ -8,13 +8,14 @@ import {
 import axios from "axios";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { CommandLikeHandler } from "../../api/command/CommandLikeHandler";
 import { ExtendedUser } from "../../api/user/ExtendedUser";
 import { ClanDetails } from "../../api/clan/ClanDetails";
 import { ApiUtil } from "../../data/ApiUtil";
 import { SaturnBot } from "../..";
 
-export class GuildsQueryHandler extends CommandLikeHandler {
+export class GuildsQueryHandler {
+
+    //extends CommandLikeHandler
 
     buildRepresentable(): SlashCommandOptionsOnlyBuilder {
         return new SlashCommandBuilder().setName("query")
@@ -42,7 +43,7 @@ export class GuildsQueryHandler extends CommandLikeHandler {
                         const isSPOwned: boolean = CLANS.includes(user.clan().identity_guild_id);
 
                         const reply: EmbedBuilder = new EmbedBuilder()
-                            .setColor(0x3567a3)
+                            .setColor(0xFFFFFF)
 
                         reply.setTitle(user.username() + "'s clan")
                         reply.setDescription(`<:${emoji.name}:${emoji.id}> **${user.clan().tag}** - ${isSPOwned ? "Owned" : "Not owned"} by Solarplanet`)
@@ -51,7 +52,7 @@ export class GuildsQueryHandler extends CommandLikeHandler {
                     });
             } else {
                 const reply = new EmbedBuilder()
-                    .setColor(0x3567a3)
+                    .setColor(0xFFFFFF)
 
                 reply.setTitle(user.username() + " does not belong to any clan")
 
