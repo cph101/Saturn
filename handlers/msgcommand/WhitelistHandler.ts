@@ -18,23 +18,33 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
             .setAuthor(author);
     
         if (Object.keys(users).includes(message.author.id)) {
+            const rankNames = {
+                0: "STAFF",
+                1: "OWNER",
+                2: "FOUNDER"
+            }
+
             setContent: {
-                if (users[message.author.id] != "FOUNDER") {
-                    embed.setColor(0xED4245);
-                    embed.setDescription("Error: you have access to admin commands but do not possess the `FOUNDER` rank.");
-                    break setContent;
-                } 
+                const authorRank = users[message.author.id];
+    
                 if (message.content.match(/^,(whitelist|wl) ranks$/)) {
                     let description = "";
     
                     for (const user in users) {
-                        description += `- <@${user}>: ${users[user]}\n`;
+                        description += `- <@${user}>: ${rankNames[users[user]]}\n`;
                     }
                     embed.setDescription(description);
                     break setContent;
                 }
+    
                 const addMaybe = message.content.match(/^,(whitelist|wl) add (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (addMaybe) {
+                    if (authorRank < 1) {
+                        embed.setColor(0xED4245);
+                        embed.setDescription("Error: you do not have permission to add users to the whitelist.");
+                        break setContent;
+                    }
+    
                     const userId = addMaybe[3] || addMaybe[2];
                     const success = await SuperUsers.addAdmin(userId);
                     if (success) {
@@ -48,30 +58,41 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                 const remMaybe = message.content.match(/^,(whitelist|wl) remove (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (remMaybe) {
                     const userId = remMaybe[3] || remMaybe[2];
-                    const output = await SuperUsers.removeUser(userId);
+                    const output = await SuperUsers.removeUser(userId, authorRank);
                     if (output == 0) {
                         embed.setDescription(`User <@${userId}> was never on the whitelist to begin with :P`);
                     } else if (output == 1) {
-                        embed.setDescription(`User <@${userId}> has rank \`FOUNDER\` and can only be removed by GOD!!`);
+                        embed.setDescription(`User <@${userId}> has rank \`FOUNDER\` and cannot be removed.`);
+                    } else if (output == 2) {
+                        embed.setDescription(`Error: you do not have permission to remove an \`OWNER\`.`);
+                    } else if (output == 3) {
+                        embed.setDescription(`Error: you do not have permission to remove \`STAFF\`.`);
                     } else {
-                        embed.setDescription(`User <@${userId}> was successfully removed from the whitelist. Rest in pieces, <@${userId}>!`);
+                        embed.setDescription(`User <@${userId}> was successfully removed from the whitelist.`);
                     }
                     break setContent;
                 }
-
+    
                 const promMaybe = message.content.match(/^,(whitelist|wl) promote (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (promMaybe) {
+                    if (authorRank < 2) {
+                        embed.setColor(0xED4245);
+                        embed.setDescription("Error: only `FOUNDERS` can promote users to `OWNER`.");
+                        break setContent;
+                    }
+    
                     const userId = promMaybe[3] || promMaybe[2];
-                    const output = await SuperUsers.promoteToFounder(userId);
+                    const output = await SuperUsers.promoteToOwner(userId);
                     if (output == 0) {
                         embed.setDescription(`User <@${userId}> is not on the whitelist.`);
                     } else if (output == 1) {
-                        embed.setDescription(`User <@${userId}> is already a \`FOUNDER\`.`);
+                        embed.setDescription(`User <@${userId}> is already an \`OWNER\`.`);
                     } else {
-                        embed.setDescription(`User <@${userId}> was promoted to \`FOUNDER\`.`);
+                        embed.setDescription(`User <@${userId}> was promoted to \`OWNER\`.`);
                     }
                     break setContent;
                 }
+    
                 return;
             }
         } else {
@@ -80,6 +101,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
         }
         message.reply({ embeds: [embed] });
     }    
+      
 
     handledEvent(): "messageCreate" {
         return "messageCreate";
