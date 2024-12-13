@@ -55,7 +55,7 @@ export class ListHandler extends EventHandler<"messageCreate"> {
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content == ",list";
+        return message.content == ";list";
     }
     
 }

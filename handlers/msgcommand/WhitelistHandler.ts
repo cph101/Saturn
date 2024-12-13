@@ -27,7 +27,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
             setContent: {
                 const authorRank = users[message.author.id];
     
-                if (message.content.match(/^,(whitelist|wl) ranks$/)) {
+                if (message.content.match(/^;(whitelist|wl) ranks$/)) {
                     let description = "";
     
                     for (const user in users) {
@@ -37,7 +37,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                     break setContent;
                 }
     
-                const addMaybe = message.content.match(/^,(whitelist|wl) add (<@!?(\d{17,20})>|\d{17,20})$/);
+                const addMaybe = message.content.match(/^;(whitelist|wl) add (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (addMaybe) {
                     if (authorRank < 1) {
                         embed.setColor(0xED4245);
@@ -55,7 +55,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                     break setContent;
                 }
     
-                const remMaybe = message.content.match(/^,(whitelist|wl) remove (<@!?(\d{17,20})>|\d{17,20})$/);
+                const remMaybe = message.content.match(/^;(whitelist|wl) remove (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (remMaybe) {
                     const userId = remMaybe[3] || remMaybe[2];
                     const output = await SuperUsers.removeUser(userId, authorRank);
@@ -73,7 +73,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                     break setContent;
                 }
     
-                const promMaybe = message.content.match(/^,(whitelist|wl) promote (<@!?(\d{17,20})>|\d{17,20})$/);
+                const promMaybe = message.content.match(/^;(whitelist|wl) promote (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (promMaybe) {
                     if (authorRank < 2) {
                         embed.setColor(0xED4245);
@@ -108,7 +108,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content.startsWith(",whitelist") || message.content.startsWith(",wl")
+        return message.content.startsWith(";whitelist") || message.content.startsWith(";wl")
     }
 
 }
