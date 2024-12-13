@@ -46,7 +46,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
             return;
         }
     
-        const args = message.content.match(/^;(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) (.*)$/);
+        const args = message.content.match(/^,(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) (.*)$/);
         const member = args[2];
         const guild = args[4];
     
@@ -146,7 +146,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content.match(/^;(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) .*$/) != null;
+        return message.content.match(/^,(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) .*$/) != null;
     }
     
 }

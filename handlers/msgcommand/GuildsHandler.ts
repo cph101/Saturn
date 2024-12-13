@@ -54,6 +54,6 @@ export class GuildsCommandHandler extends EventHandler<"messageCreate"> {
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content == ";guilds";
+        return message.content == ",guilds";
     }
 }
