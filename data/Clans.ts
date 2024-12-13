@@ -6,6 +6,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { randomUUID } from "node:crypto";
 import { ButtonInteraction } from "discord.js";
+import { ResourceDiskWrapper } from "./ResourceDiskWrapper";
 
 export type Clan = {
     id: string
@@ -33,6 +34,8 @@ export class Clans {
     public static async refreshCache(interaction: InteractionReplyable) {
         this.cachedMemberCounts = [];
         this.lastUpdated = Date.now();
+
+        await ResourceDiskWrapper.assertExistant("SolarPlanetGuilds.json")
 
         let clansLocal: Clan[] = JSON.parse(await fs.readFile(
             path.resolve('resources/SolarPlanetGuilds.json'), 
