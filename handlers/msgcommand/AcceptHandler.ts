@@ -85,7 +85,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
                 await waitingMessage.edit({ embeds: [embed] });
             } else {
                 await guildInfo.withIconImage(async (emoji) => {
-                    embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:${emoji.name}:${emoji.id}>**\`#${guildData.name}\`**`);
+                    embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:${emoji.name}:${emoji.id}>**\`#${guildData.name}\`** by <@${message.author.id}>`);
                     await waitingMessage.edit({ embeds: [embed] });
                 });
             }
