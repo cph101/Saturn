@@ -37,7 +37,7 @@ export class GuildsCommandHandler extends EventHandler<"messageCreate"> {
             Clans.getClanMemberCounts().forEach(async ({ clan }, index) => {
                 clanList += `**\`#${index + 1}\`** <:guild${index + 1}icon:${clan.icon}> **\`#${
                     clan.name.toUpperCase()
-                }\`** - **[${index == 9 ? "Soon" : "Apply"}](https://discord.gg/${clan.invite})**\n`;
+                }\`** - **[Apply](https://discord.gg/${clan.invite})**\n`;
             });
 
             embed.setTitle("GUILDS")
