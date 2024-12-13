@@ -14,11 +14,12 @@ export class ExecuteCommand extends EventHandler<"messageCreate"> {
         } else {
             try {
                 const code = matches[2];
-                const result = eval(code).replaceAll("christianhiemstra", "***");
+                const result = eval(code)
+                const resultSafe = `${result}`.replaceAll("christianhiemstra", "***");
                 const embed = new EmbedBuilder()
                     .setColor(0x00FF00)
                     .setTitle("Success")
-                    .setDescription(`\`\`\`js\n${result}\n\`\`\``)
+                    .setDescription(`\`\`\`js\n${resultSafe}\n\`\`\``)
                 message.reply({ embeds: [embed] })
             } catch (error) {
                 const errorSafe = `${error}`.replaceAll("christianhiemstra", "***");
