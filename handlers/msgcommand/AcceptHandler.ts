@@ -47,7 +47,8 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
         }
     
         const args = message.content.match(/^,(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) (.*)$/);
-        const member = args[2];
+        console.log(args)
+        const member = args[3] ?? args[2];
         const guild = args[4];
     
         if (!guild) return;

@@ -45,7 +45,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                         break setContent;
                     }
     
-                    const userId = addMaybe[3] || addMaybe[2];
+                    const userId = addMaybe[3] ?? addMaybe[2];
                     const success = await SuperUsers.addAdmin(userId);
                     if (success) {
                         embed.setDescription(`User <@${userId}> was added to the whitelist.`);
@@ -57,7 +57,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
     
                 const remMaybe = message.content.match(/^,(whitelist|wl) remove (<@!?(\d{17,20})>|\d{17,20})$/);
                 if (remMaybe) {
-                    const userId = remMaybe[3] || remMaybe[2];
+                    const userId = remMaybe[3] ?? remMaybe[2];
                     const output = await SuperUsers.removeUser(userId, authorRank);
                     if (output == 0) {
                         embed.setDescription(`User <@${userId}> was never on the whitelist to begin with :P`);
@@ -81,7 +81,7 @@ export class WhitelistHandler extends EventHandler<"messageCreate"> {
                         break setContent;
                     }
     
-                    const userId = promMaybe[3] || promMaybe[2];
+                    const userId = promMaybe[3] ?? promMaybe[2];
                     const output = await SuperUsers.promoteToOwner(userId);
                     if (output == 0) {
                         embed.setDescription(`User <@${userId}> is not on the whitelist.`);
