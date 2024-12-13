@@ -81,7 +81,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
             await this.tryAccept(application["id"], application["guild_id"]);
             embed.setColor(0xFFFFFF)
             if (guildData.name.toLowerCase() == "hail") {
-                embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:HAIL:1311970450112249896>**\`#${guildData.name}\`**`);
+                embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:HAIL:1311970450112249896>**\`#${guildData.name}\`** by <@${message.author.id}>`);
                 await waitingMessage.edit({ embeds: [embed] });
             } else {
                 await guildInfo.withIconImage(async (emoji) => {
