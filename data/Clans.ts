@@ -52,25 +52,13 @@ export class Clans {
         if (guildID == null) return null;
         if (guildID.length > 20 || guildID.length < 17) return 0;
 
-        return await ApiUtil.wrapAxiosWithEmbedError(interaction, async function () {
-            const response = await axios.get(
-                `https://discord.com/api/v9/discovery/${guildID}/clan`, {
-                    headers: {
-                        Authorization: SaturnBot.UB_TOKEN,
-                    }
+        return (await axios.get(
+            `https://discord.com/api/v9/discovery/${guildID}/clan`, {
+                headers: {
+                    Authorization: SaturnBot.UB_TOKEN,
                 }
-            );
-    
-            return response.data["member_count"];
-        }, function (builder, axiosError) {
-            const errorData = axiosError.response.data;
-
-            if (errorData && axiosError.response.status != 401) {
-                builder.setDescription(`Discord returned error "${errorData['message']}", code ${errorData['code']}`)
             }
-            
-            return true;
-        });
+        )).data["member_count"];
     }
 }
 

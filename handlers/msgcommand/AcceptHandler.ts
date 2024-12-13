@@ -46,9 +46,9 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
             return;
         }
     
-        const args = message.content.split(" ");
-        const guild = args[2];
-        const member = args[1]?.replaceAll("<@", "").replaceAll(">", "");
+        const args = message.content.match(/^,(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) (.*)$/);
+        const member = args[2];
+        const guild = args[4];
     
         if (!guild) return;
     
@@ -81,16 +81,16 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
             const guildInfo: ClanDetails = await ClanDetails.get(guildData.id);
             embed.setColor(0xFFFFFF)
             if (guildData.name.toLowerCase() == "hail") {
-                embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:HAIL:1311067084926746735>\`#${guildData.name}\``);
+                embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:HAIL:1311970450112249896>**\`#${guildData.name}\`**`);
                 await waitingMessage.edit({ embeds: [embed] });
             } else {
                 await guildInfo.withIconImage(async (emoji) => {
-                    embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:${emoji.name}:${emoji.id}>\`${guildData.name}\``);
+                    embed.setDescription(`<@${member}> (\`${member}\`) has been accepted into <:${emoji.name}:${emoji.id}>**\`#${guildData.name}\`**`);
                     await waitingMessage.edit({ embeds: [embed] });
                 });
             }
             const guild = await SaturnBot.INSTANCE.client.guilds.fetch("1244682239187619940")
-            const channel = await guild.channels.fetch("1316775216508174419"); 
+            const channel = await guild.channels.fetch("1299078683008565349"); 
             if (channel.isSendable()) {
                 channel.send(embed.toJSON().description)
             } else {
@@ -146,7 +146,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
     }
 
     async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content.startsWith(",accept");
+        return message.content.match(/^,(accept|ax) (<@!?(\d{17,20})>|\d{17,20}) .*$/) != null;
     }
     
 }
