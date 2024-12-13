@@ -1,5 +1,6 @@
 import * as fs from "node:fs/promises"
 import * as path from "path"
+import { ResourceDiskWrapper } from "./ResourceDiskWrapper";
 
 export class SuperUsers {
     private static users: {
@@ -14,6 +15,10 @@ export class SuperUsers {
     // Refresh the users list from the whitelist database
     public static async refreshUsers() {
         this.users = [];
+
+
+        // Not here
+        await ResourceDiskWrapper.assertExistant("whitelist.db")
 
         const superusers = await fs.readFile(
             path.resolve("resources/whitelist.db"),
