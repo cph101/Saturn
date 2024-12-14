@@ -1,8 +1,7 @@
 import {
     ChatInputCommandInteraction, User, EmbedBuilder, 
-    SlashCommandUserOption, SlashCommandStringOption,
-    SlashCommandBuilder,
-    SlashCommandOptionsOnlyBuilder,
+    Message,
+    OmitPartialGroupDMChannel,
 } from "discord.js";
 
 import axios from "axios";
@@ -12,25 +11,15 @@ import { ExtendedUser } from "../../api/user/ExtendedUser";
 import { ClanDetails } from "../../api/clan/ClanDetails";
 import { ApiUtil } from "../../data/ApiUtil";
 import { SaturnBot } from "../..";
+import { EventHandler } from "../../api/EventHandler";
 
-export class GuildsQueryHandler {
+export class GuildsQueryHandler extends EventHandler<"messageCreate"> {
+    async handle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
+        const args = message.content.match(/^,query (<@!?(\d{17,20})>|\d{17,20})$/);
+        const member = args[2] ?? args[1];
 
-    //extends CommandLikeHandler
+        const user = await ExtendedUser.fetch(member)
 
-    buildRepresentable(): SlashCommandOptionsOnlyBuilder {
-        return new SlashCommandBuilder().setName("query")
-            .setDescription("Gets guild information about a specified user, or the command sender")
-            .addUserOption(new SlashCommandUserOption().setName("name").setDescription("User name to get guild info about").setRequired(false))
-            .addStringOption(new SlashCommandStringOption().setName("id").setDescription("User id to get guild info about").setRequired(false))
-    }
-
-    async handleCommand(interaction: ChatInputCommandInteraction) {
-        const id: string = interaction.options?.getString("id")
-            ?? (interaction.options?.getUser("name") ?? interaction.user).id;
-
-        const user = await ExtendedUser.fetch(id)
-
-        if (!interaction.replied) {
             if (user.clan()) {
                 ClanDetails.withIconImage(
                     user.clan().identity_guild_id, user.clan().badge, async (emoji) => {
@@ -48,7 +37,7 @@ export class GuildsQueryHandler {
                         reply.setTitle(user.username() + "'s clan")
                         reply.setDescription(`<:${emoji.name}:${emoji.id}> **${user.clan().tag}** - ${isSPOwned ? "Owned" : "Not owned"} by Solarplanet`)
 
-                        await interaction.reply({ embeds: [reply] })
+                        await message.reply({ embeds: [reply] })
                     });
             } else {
                 const reply = new EmbedBuilder()
@@ -56,9 +45,8 @@ export class GuildsQueryHandler {
 
                 reply.setTitle(user.username() + " does not belong to any clan")
 
-                interaction.reply({ embeds: [reply] })
+                message.reply({ embeds: [reply] })
             }
-        }
     }
 
     async getUser(userID: string, interaction: ChatInputCommandInteraction): Promise<User> {
@@ -89,6 +77,14 @@ export class GuildsQueryHandler {
 
         });
 
+    }
+
+    handledEvent(): "messageCreate" {
+        return "messageCreate";
+    }
+
+    async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
+        return message.content.match(/^,query (<@!?(\d{17,20})>|\d{17,20})$/) != null;
     }
 
 }

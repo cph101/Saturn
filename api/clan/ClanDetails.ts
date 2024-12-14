@@ -34,6 +34,9 @@ export class ClanDetails {
     }
 
     public static async withIconImage<T>(guildID: Snowflake, iconHash: string, consumer: (emoji: ApplicationEmoji) => Promise<T>) {
+
+        console.log(SaturnBot.INSTANCE.uAPI.options.cdn + URoutes.clanBadge(guildID, iconHash));
+        
         const emojiImage: ArrayBuffer = await fetch(
              SaturnBot.INSTANCE.uAPI.options.cdn + URoutes.clanBadge(guildID, iconHash)
         )
