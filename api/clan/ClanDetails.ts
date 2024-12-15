@@ -25,31 +25,36 @@ export class ClanDetails {
         return this.rawData["tag"]
     }
 
-    public iconHash(): string {
-        return this.rawData["icon_hash"]
+    public badgeHash(): string {
+        return this.rawData["badge_hash"]
     }
 
     public async withIconImage<T>(consumer: (emoji: ApplicationEmoji) => Promise<T>) {
-        return await ClanDetails.withIconImage(this.guildID(), this.iconHash(), consumer);
+        return await ClanDetails.withIconImage(this.guildID(), this.badgeHash(), consumer);
     }
 
-    public static async withIconImage<T>(guildID: Snowflake, iconHash: string, consumer: (emoji: ApplicationEmoji) => Promise<T>) {
-
-        console.log(SaturnBot.INSTANCE.uAPI.options.cdn + URoutes.clanBadge(guildID, iconHash));
+    public static async withIconImage<T>(guildID: Snowflake, badgeHash: string, consumer: (emoji: ApplicationEmoji) => Promise<T>) {
         
         const emojiImage: ArrayBuffer = await fetch(
-             SaturnBot.INSTANCE.uAPI.options.cdn + URoutes.clanBadge(guildID, iconHash)
+             SaturnBot.INSTANCE.uAPI.options.cdn + URoutes.clanBadge(guildID, badgeHash)
         )
         .then(res => res.arrayBuffer());
 
-        const emojiCreated = await SaturnBot.INSTANCE.client.application.emojis.create({
-            name: iconHash.substring(0, 15),
+        var emojiCreated;
+        try {
+        emojiCreated = await SaturnBot.INSTANCE.client.application.emojis.create({
+            name: badgeHash.substring(0, 15),
             attachment: Buffer.from(emojiImage)
         })
+        } catch {
+            emojiCreated = null
+        }
 
         const output = await consumer(emojiCreated);
 
-        await SaturnBot.INSTANCE.client.application.emojis.delete(emojiCreated.id)
+        if (emojiCreated?.id) {
+            await SaturnBot.INSTANCE.client.application.emojis.delete(emojiCreated.id)
+        }
 
         return output;
     }

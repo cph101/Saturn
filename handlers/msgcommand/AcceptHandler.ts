@@ -81,18 +81,19 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
             await this.tryAccept(application["id"], application["guild_id"]);
             embed.setColor(0xFFFFFF)
             if (guildData.name.toLowerCase() == "hail") {
-                embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:HAIL:1311970450112249896>**\`#${guildData.name}\`** by <@${message.author.id}>`);
+                embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:HAIL:1311970450112249896>**\`#${guildData.name}\`**`);
                 await waitingMessage.edit({ embeds: [embed] });
             } else {
                 await guildInfo.withIconImage(async (emoji) => {
-                    embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:${emoji.name}:${emoji.id}>**\`#${guildData.name}\`** by <@${message.author.id}>`);
+                    embed.setDescription(`<@${member}> (\`${member}\`) was accepted into <:${emoji?.name}:${emoji?.id}>**\`#${guildData.name}\`**`);
                     await waitingMessage.edit({ embeds: [embed] });
                 });
             }
             const guild = await SaturnBot.INSTANCE.client.guilds.fetch("1244682239187619940")
             const channel = await guild.channels.fetch("1299078683008565349");
             if (channel.isSendable()) {
-                channel.send(embed.toJSON().description)
+                embed.setDescription(`<@${member}> (\`${member}\`) was accepted into **\`#${guildData.name}\`** by <@${message.author.id}>`);
+                await channel.send({ embeds: [embed] });
             } else {
                 throw new AssertionError()
             }

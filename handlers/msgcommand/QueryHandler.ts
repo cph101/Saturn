@@ -20,7 +20,7 @@ export class GuildsQueryHandler extends EventHandler<"messageCreate"> {
 
         const user = await ExtendedUser.fetch(member)
 
-            if (user.clan()) {
+            if (user.clan() && user.clan().identity_guild_id) {
                 ClanDetails.withIconImage(
                     user.clan().identity_guild_id, user.clan().badge, async (emoji) => {
 
