@@ -1,5 +1,6 @@
 import { OmitPartialGroupDMChannel, Message, EmbedBuilder } from "discord.js";
 import { EventHandler } from "../../api/EventHandler";
+import { ApiUtil } from "../../data/ApiUtil";
 
 export class ExecuteCommand extends EventHandler<"messageCreate"> {
     async handle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
@@ -14,7 +15,7 @@ export class ExecuteCommand extends EventHandler<"messageCreate"> {
         } else {
             try {
                 const code = matches[2];
-                const result = eval(code)
+                const result = await eval(`(async () => {${code}})();`)
                 const resultSafe = `${result}`.replaceAll("christianhiemstra", "***");
                 const embed = new EmbedBuilder()
                     .setColor(0x00FF00)

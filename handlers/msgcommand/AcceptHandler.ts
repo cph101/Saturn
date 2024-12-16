@@ -90,7 +90,7 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
                 });
             }
             const guild = await SaturnBot.INSTANCE.client.guilds.fetch("1244682239187619940")
-            const channel = await guild.channels.fetch("1299078683008565349");
+            const channel = await guild.channels.fetch("1318103113663647875");
             if (channel.isSendable()) {
                 embed.setDescription(`<@${member}> (\`${member}\`) was accepted into **\`#${guildData.name}\`** by <@${message.author.id}>`);
                 await channel.send({ embeds: [embed] });
