@@ -1,8 +1,9 @@
 import { 
-    ChatInputCommandInteraction, EmbedAuthorOptions, EmbedBuilder, EmbedFooterOptions, Message, OmitPartialGroupDMChannel, SlashCommandBuilder 
+    EmbedAuthorOptions, EmbedBuilder,
+    EmbedFooterOptions, Message, 
+    OmitPartialGroupDMChannel
 } from "discord.js";
 
-import { CommandLikeHandler } from "../../api/command/CommandLikeHandler";
 import { Clans } from "../../data/Clans";
 import { SaturnBot } from "../..";
 import { EventHandler } from "../../api/EventHandler";

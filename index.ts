@@ -1,7 +1,6 @@
-import { Client, Guild, REST } from 'discord.js';
+import { Client, REST } from 'discord.js';
 import 'dotenv/config'
 import { SaturnEvents } from './api/SaturnEvents';
-import { ResourceDiskWrapper } from './data/ResourceDiskWrapper';
 
 export class SaturnBot {
   public static INSTANCE: SaturnBot = new SaturnBot();

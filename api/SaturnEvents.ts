@@ -3,8 +3,6 @@ import * as path from "node:path";
 import { EventHandler } from "./EventHandler";
 import { ClientEvents, Routes, SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js";
 import { SaturnBot } from "..";
-import { CommandLikeHandler } from "./command/CommandLikeHandler";
-import { CommandTreeHandler } from "./command/CommandTreeHandler";
 
 export class SaturnEvents {
 
@@ -55,34 +53,6 @@ export class SaturnEvents {
                 }
             }
         }
-
-        let commands = [];
-
-        Object.entries(this.handlers).forEach(handlerData => {
-            for (const possibleHandlerClass of handlerData[1]) {
-                // Instantiante handler and create representation
-                const possibleHandler: EventHandler<any> = new possibleHandlerClass();
-                if (possibleHandler instanceof CommandLikeHandler) {
-                    var representation = possibleHandler.buildRepresentable();
-                    if (representation instanceof SlashCommandBuilder) {
-                        // Add subcommands if applicable
-                        if (possibleHandler instanceof CommandTreeHandler) {
-                            possibleHandler.subcommands().forEach(sub => {
-                                representation = (representation as SlashCommandBuilder)
-                                    .addSubcommand(new sub().buildRepresentable())
-                            });
-                        }
-                        // Add command to list
-                        commands.push(representation)
-                    }
-                }
-    
-            }
-        })
-
-        await SaturnBot.INSTANCE.API.put(
-            Routes.applicationCommands(SaturnBot.CLIENT_ID), { body: commands }
-        );
     }
 
     private static async getAllFiles(dir: string, files: string[] = []): Promise<string[]> {

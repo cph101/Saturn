@@ -1,4 +1,8 @@
-import { OmitPartialGroupDMChannel, Message, EmbedBuilder, EmbedFooterOptions, EmbedAuthorOptions } from "discord.js";
+import { 
+    OmitPartialGroupDMChannel, Message, 
+    EmbedBuilder, EmbedAuthorOptions 
+} from "discord.js";
+
 import { EventHandler } from "../../api/EventHandler";
 import { SuperUsers } from "../../data/SuperUsers";
 
