@@ -1,15 +1,18 @@
 import { 
-    ChatInputCommandInteraction, 
     EmbedAuthorOptions, 
-    EmbedBuilder, EmbedFooterOptions, Message, OmitPartialGroupDMChannel, SlashCommandBuilder
+    EmbedBuilder, EmbedFooterOptions, Message, OmitPartialGroupDMChannel
 } from "discord.js";
 
-import { EventHandler } from "../../api/EventHandler";
 import { Clans } from "../../data/Clans";
 import { SuperUsers } from "../../data/SuperUsers";
-import { ClanDetails } from "../../api/clan/ClanDetails";
+import { TextCommand } from "../../api/txtcom/TextCommand";
+import { CommandPresentation } from "../../api/txtcom/CommandPresentation";
 
-export class ListHandler extends EventHandler<"messageCreate"> {
+export class ListHandler extends TextCommand {
+
+    buildRepresentable(): CommandPresentation<any> {
+        return new CommandPresentation.Builder("list").build();
+    }
 
     async handle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
         await SuperUsers.refreshUsers();
@@ -48,14 +51,6 @@ export class ListHandler extends EventHandler<"messageCreate"> {
             embed.setTitle("Error: you do not have access to admin commands")
         }
         message.reply({ embeds: [embed] })
-    }
-
-    handledEvent(): "messageCreate" {
-        return "messageCreate";
-    }
-
-    async canHandle(message: OmitPartialGroupDMChannel<Message<boolean>>) {
-        return message.content == ",list";
     }
     
 }

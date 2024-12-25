@@ -1,22 +1,14 @@
 import {
-    ChatInputCommandInteraction, SlashCommandStringOption,
-    Interaction, EmbedBuilder, SlashCommandUserOption,
-    SlashCommandBuilder, SlashCommandOptionsOnlyBuilder,
-    EmbedAuthorOptions,
-    Message,
-    OmitPartialGroupDMChannel,
-    MessageType,
-    EmbedFooterOptions
+    EmbedBuilder, EmbedAuthorOptions,
+    Message, OmitPartialGroupDMChannel,
 } from "discord.js";
 
 import axios from "axios";
-import { CommandLikeHandler } from "../../api/command/CommandLikeHandler";
 import { Clan, Clans } from "../../data/Clans";
 import { ClanDetails } from "../../api/clan/ClanDetails";
 import { SaturnBot } from "../..";
 import { EventHandler } from "../../api/EventHandler";
 import { SuperUsers } from "../../data/SuperUsers";
-import { ApiUtil } from "../../data/ApiUtil";
 import { AssertionError } from "assert";
 
 export class AcceptHandler extends EventHandler<"messageCreate"> {
@@ -27,12 +19,10 @@ export class AcceptHandler extends EventHandler<"messageCreate"> {
         await SuperUsers.refreshUsers();
         const users = SuperUsers.getUsers();
 
-
         const author: EmbedAuthorOptions = {
             name: message.author.username,
             iconURL: message.author.avatarURL()
         };
-
 
         let embed: EmbedBuilder = new EmbedBuilder()
             .setColor(0xFFFFFF)

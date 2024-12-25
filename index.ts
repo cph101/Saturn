@@ -1,7 +1,6 @@
-import { Client, Guild, REST } from 'discord.js';
+import { Client, REST } from 'discord.js';
 import 'dotenv/config'
 import { SaturnEvents } from './api/SaturnEvents';
-import { ResourceDiskWrapper } from './data/ResourceDiskWrapper';
 
 export class SaturnBot {
   public static INSTANCE: SaturnBot = new SaturnBot();
@@ -32,6 +31,8 @@ export class SaturnBot {
     SaturnBot.INSTANCE.client.on('ready', async () => {
       console.log("Bot successfully loaded")
     });
+
+    //const {SaturnBot} = require("../../index"); var sp = await SaturnBot.INSTANCE.client.guilds.fetch("1244682239187619940"); var annoyinglilbitch = await sp.members.fetch("1113881366636011550"); annoyinglilbitch.timeout(5);
     
   }
 }
