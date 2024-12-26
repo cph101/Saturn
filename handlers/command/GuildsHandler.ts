@@ -36,7 +36,7 @@ export class GuildsCommandHandler extends EventHandler<"messageCreate"> {
             }
             
             Clans.getClanMemberCounts().forEach(async ({ clan }, index) => {
-                clanList += `**\`#${index + 1}\`** <:guild${index + 1}icon:${clan.icon}> **\`#${
+                clanList += `**\`#${index + 1}\`** **\`#${
                     clan.name.toUpperCase()
                 }\`** - **[Apply](https://discord.gg/${clan.invite})**\n`;
             });

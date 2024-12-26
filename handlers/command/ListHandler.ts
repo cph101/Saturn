@@ -39,7 +39,7 @@ export class ListHandler extends TextCommand {
             }
 
             Clans.getClanMemberCounts().forEach(async ({ clan, members }, index) => {
-                clanList += `**\`#${index + 1}\`** <:guild${index + 1}icon:${clan.icon}> **\`#${
+                clanList += `**\`#${index + 1}\`** **\`#${
                     clan.name.toUpperCase()
                 }\`** - **${members} / 200**\n`;
             });
